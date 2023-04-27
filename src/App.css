@@ -1,0 +1,53 @@
+
+.hoverEff {
+    background-color: #004E56;
+    background: url("https://wweb.dev/resources/creative-hover-effects/wave.svg") repeat-x #004E56;
+    background-position-x: 0%;
+    background-position-y: 0%;
+    background-size: auto;
+    background-clip: border-box;
+    -webkit-background-clip: border-box;
+    background-clip: border-box;
+    background-size: 200% 100%;
+    background-position-x: 0;
+    background-position-y: 2em;
+    -webkit-transition: background-position-y 0.6s ease;
+    transition: background-position-y 0.6s ease;
+    -webkit-animation: waveAnimation 4s infinite linear;
+    animation: waveAnimation 4s infinite linear;
+    animation-play-state: running;
+    -webkit-animation-play-state: paused;
+    animation-play-state: paused;
+  }
+
+
+
+.hoverEff:hover {
+  background-position-x: 0;
+  background-position-y: 0;
+  -webkit-animation-play-state: running;
+  animation-play-state: running;
+  cursor: pointer;
+}
+
+@keyframes waveAnimation{
+  from {
+    background-position-x: 0%;
+  }
+  to {
+    background-position-x: 200%;
+  }
+}
+
+.fade-in-section {
+    opacity: 0;
+    transform: translateY(2vh);
+    visibility: hidden;
+    transition: opacity 0.6s ease-in-out, transform 1.2s ease-out;
+    will-change: opacity, visibility;
+  }
+  .fade-in-section.is-visible {
+    opacity: 1;
+    transform: none;
+    visibility: visible;
+  }

@@ -2,8 +2,11 @@
 module.exports = {
   content: ["./src/**/*.{html,js}"],
   theme: {
-    extend: {},
+    extend: {
+      backgroundImage: {
+        'poolFloor': "url('../public/pool_floor.jpg')"
+    }
+  },
   },
   plugins: [],
 }
-
