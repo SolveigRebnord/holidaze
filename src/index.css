@@ -1,3 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.is-sticky {
+
+    background-color: #252630;
+  }

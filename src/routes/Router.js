@@ -8,6 +8,7 @@ import LogIn from "../pages/LogIn";
 import Register from "../pages/Register";
 import Profiles from "../pages/Profiles";
 import Account from "../pages/Account";
+import Homepage from "../pages/Homepage";
 
 
 const router = createBrowserRouter([
@@ -18,7 +19,7 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Venues />
+        element: <Homepage />
       },
       {
         path: "/venues/:id",
