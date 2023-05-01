@@ -21,7 +21,6 @@ const Venues = () => {
         {!currentUser &&  <span className="absolute w-full bg-red-300 top-0">Log in to find it all</span>}
         <div className="flex flex-row justify-between items-center mb-12">
           <h1 className="">All Products</h1>
-          <img src="/filter.svg" alt="Filter icon" />
         </div>
         <div className="flex flex-wrap justify-between lg:gap-14">
           {venues.map((venue) => (
@@ -44,7 +43,7 @@ const Venues = () => {
 
               <div className="mt-4 flex flex-col justify-end items-start gap-3">
                 <div>
-                  <p className="pTitle text-md text-gray-700 ">
+                  <p className="pTitle text-md text-gray-700">
                     <Link to={`/venues/${venue.id}`}>{venue.name} </Link>
                   </p>
                 </div>
