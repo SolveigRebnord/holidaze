@@ -11,7 +11,7 @@ module.exports = {
       passionOne: "Passion One"
     },
     colors: {
-      purpleBlack: "#252630",
+      purpleBlack: "#001721",
       passionOrange: "#E9AD83",
       lightBeige: "#FDF3E8"
   },
