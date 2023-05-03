@@ -22,6 +22,10 @@ const router = createBrowserRouter([
         element: <Homepage />
       },
       {
+        path: "/venues",
+        element: <Venues />,
+      },
+      {
         path: "/venues/:id",
         element: <OneVenue />,
       },
