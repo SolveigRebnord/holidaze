@@ -1,4 +1,12 @@
 
+
+
+
+.react-slideshow-container+ul.indicators {
+
+  gap: 4px;
+}
+
 .hoverEff {
     background-color: #004E56;
     background: url("https://wweb.dev/resources/creative-hover-effects/wave.svg") repeat-x #004E56;
@@ -58,4 +66,70 @@
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
+  }
+
+
+  .slide-container {
+    width: 75%;
+    margin: auto;
+  }
+  
+  h3 {
+    text-align: center;
+  }
+  
+  .each-slide > div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-size: cover;
+    height: 300px;
+  }
+  
+  .each-slide span {
+    padding: 20px;
+    font-size: 20px;
+    background: #efefef;
+    text-align: center;
+  }
+  
+  .each-fade {
+    display: flex;
+  }
+  
+  .each-fade .image-container {
+    width: 75%;
+    overflow: hidden;
+  }
+  
+  .each-fade .image-container img {
+    width: 100%;
+  }
+  
+  .each-fade h2 {
+    width: 25%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    background: #adceed;
+  }
+  
+  .indicator {
+    width: 30px;
+    color: blue;
+    text-align: center;
+    cursor: pointer;
+    border: 1px blue solid;
+    margin: 0;
+  }
+  .indicator.active {
+    background: #000;
+    color: #fff;
+  }
+
+
+  .slide-container .react-slideshow-container ul.indicators {
+
+    margin-top: 10px;
   }

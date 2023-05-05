@@ -6,3 +6,9 @@
 
   background-color: theme("colors.purpleBlack");
   }
+
+
+  ul.indicators {
+    margin: 0;
+    padding: 0;
+  }
