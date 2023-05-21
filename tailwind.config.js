@@ -4,18 +4,18 @@ module.exports = {
   theme: {
     extend: {
       backgroundImage: {
-        'poolFloor': "url('../public/pool_floor.jpg')"
+        poolFloor: "url('../public/pool_floor.jpg')",
+      },
+      fontFamily: {
+        montS: "Montserrat",
+        passionOne: "Passion One",
+      },
+      colors: {
+        purpleBlack: "#001721",
+        passionOrange: "#E9AD83",
+        lightBeige: "#FDF3E8",
+      },
     },
-    fontFamily: {
-      montS: "Montserrat",
-      passionOne: "Passion One"
-    },
-    colors: {
-      purpleBlack: "#001721",
-      passionOrange: "#E9AD83",
-      lightBeige: "#FDF3E8"
+    plugins: [],
   },
-  },
-  plugins: [],
-}
-}
+};

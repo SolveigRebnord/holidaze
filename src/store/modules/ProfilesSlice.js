@@ -7,7 +7,6 @@ const ProfilesSlice = createSlice({
   initialState: {
     profiles: [],
     singleProfile: null,
-
   },
   reducers: {
     SET_PROFILES: (state, action) => {
@@ -21,19 +20,15 @@ const ProfilesSlice = createSlice({
 
 export default ProfilesSlice.reducer;
 
-const { SET_PROFILES, SET_SINGLE_PROFILE,  } =
-ProfilesSlice.actions;
+const { SET_PROFILES, SET_SINGLE_PROFILE } = ProfilesSlice.actions;
 
-const header = authHeader()
-
-
+const header = authHeader();
 
 export const getProfiles = () => async (dispatch) => {
-
   axios({
     method: "get",
     url: "https://nf-api.onrender.com/api/v1/holidaze/profiles?_bookings=true&_venues=true&_limit=50",
-    headers: header
+    headers: header,
   })
     .then(function (response) {
       let data = response.data;
@@ -49,11 +44,11 @@ export const getSingleProfile = (name) => async (dispatch) => {
   axios({
     method: "get",
     url: `https://nf-api.onrender.com/api/v1/holidaze/profiles/${name}?_bookings=true&_venues=true&_limit=50`,
-    headers: header
+    headers: header,
   })
     .then(function (response) {
       let data = response.data;
-      console.log(data)
+      console.log(data);
       dispatch(SET_SINGLE_PROFILE(data));
     })
     .catch(function (error) {

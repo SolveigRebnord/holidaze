@@ -1,7 +1,5 @@
 import React, { Component } from "react";
 import { Slide } from "react-slideshow-image";
-import '../App.css'
-
 
 class Slider extends Component {
   constructor() {
@@ -10,7 +8,7 @@ class Slider extends Component {
     this.back = this.back.bind(this);
     this.next = this.next.bind(this);
     this.state = {
-      current: 0
+      current: 0,
     };
   }
 
@@ -22,12 +20,8 @@ class Slider extends Component {
     this.slideRef.current.goNext();
   }
 
-  
-
   render() {
-
     const slideImages = this.props.media;
-
 
     const properties = {
       duration: 5000,
@@ -37,25 +31,32 @@ class Slider extends Component {
       infinite: true,
       easing: "ease",
       indicators: true,
-      nextArrow: <span className="w-fit bg-purpleBlack p-2 h-fit mr-4"><img src="/arrow_white.svg" /></span>,
-      prevArrow: <span className="w-fit bg-purpleBlack p-2 h-fit ml-4 rotate-180"><img src="/arrow_white.svg" /></span>,
-      canSwipe: true
-  
+      nextArrow: (
+        <span className="w-fit bg-purpleBlack p-2 h-fit mr-4">
+          <img src="/arrow_white.svg" />
+        </span>
+      ),
+      prevArrow: (
+        <span className="w-fit bg-purpleBlack p-2 h-fit ml-4 rotate-180">
+          <img src="/arrow_white.svg" />
+        </span>
+      ),
+      canSwipe: true,
     };
-
-
 
     return (
       <div>
         <div className="slide-container">
           <Slide ref={this.slideRef} {...properties}>
             {slideImages.map((each, index) => (
-              <div key={index} className="each-slide h-full w-full object-cover">
-                <img className="lazy h-full"  src={each} alt="sample" />
+              <div
+                key={index}
+                className="each-slide h-full w-full object-cover"
+              >
+                <img className="lazy h-full" src={each} alt="sample" />
               </div>
             ))}
           </Slide>
-
         </div>
       </div>
     );

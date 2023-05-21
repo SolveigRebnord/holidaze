@@ -10,7 +10,6 @@ import Profiles from "../pages/Profiles";
 import Account from "../pages/Account";
 import Homepage from "../pages/Homepage";
 
-
 const router = createBrowserRouter([
   {
     path: "/",
@@ -19,7 +18,7 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Homepage />
+        element: <Homepage />,
       },
       {
         path: "/venues",
@@ -49,7 +48,6 @@ const router = createBrowserRouter([
         path: "/account",
         element: <Account />,
       },
-
     ],
   },
 ]);

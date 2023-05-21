@@ -7,8 +7,7 @@ const BookingSlice = createSlice({
   initialState: {
     bookings: [],
     singleBooking: null,
-    filteredBookings: []
-
+    filteredBookings: [],
   },
   reducers: {
     SET_BOOKINGS: (state, action) => {
@@ -25,21 +24,17 @@ const BookingSlice = createSlice({
 
 export default BookingSlice.reducer;
 
-const { SET_BOOKINGS, SET_SINGLE_BOOKING, SET_FILTERED_BOOKINGS  } =
-BookingSlice.actions;
+const { SET_BOOKINGS, SET_SINGLE_BOOKING, SET_FILTERED_BOOKINGS } =
+  BookingSlice.actions;
 
-
-const header = authHeader()
-console.log(header)
-
+const header = authHeader();
+console.log(header);
 
 export const getBookings = () => async (dispatch) => {
-
-
   axios({
     method: "get",
     url: "https://nf-api.onrender.com/api/v1/holidaze/bookings?_customer=true&_owner=true&_venue=true",
-    headers: header
+    headers: header,
   })
     .then(function (response) {
       let data = response.data;
@@ -55,12 +50,11 @@ export const getSingleBooking = (id) => async (dispatch) => {
   axios({
     method: "get",
     url: `https://nf-api.onrender.com/api/v1/holidaze/bookings/${id}`,
-    headers: header
-
+    headers: header,
   })
     .then(function (response) {
       let data = response.data;
-      console.log(data)
+      console.log(data);
 
       dispatch(SET_SINGLE_BOOKING(data));
     })
@@ -73,8 +67,7 @@ export const getFilteredBookings = (filter) => (dispatch) => {
   axios({
     method: "get",
     url: "https://nf-api.onrender.com/api/v1/holidaze/bookings?_customer=true&_owner=true&_venue=true",
-    headers: header
-
+    headers: header,
   })
     .then(function (response) {
       let data = response.data;
@@ -88,7 +81,6 @@ export const getFilteredBookings = (filter) => (dispatch) => {
         }
       });
       console.log(filteredData.length);*/
-    
 
       dispatch(SET_FILTERED_BOOKINGS(data));
     })

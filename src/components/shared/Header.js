@@ -3,12 +3,7 @@ import { useSelector } from "react-redux";
 import React from "react";
 import { useState, useEffect } from "react";
 
-
-
 const Header = () => {
-
-
-
   const [showMenu, setMenu] = useState(false);
 
   const { pathname } = useLocation();
@@ -18,7 +13,7 @@ const Header = () => {
 
   const [sticky, setSticky] = useState("");
 
-  // on render, set listener
+
   useEffect(() => {
     window.addEventListener("scroll", isSticky);
     return () => {
@@ -53,6 +48,7 @@ font-montS
 text-sm
 fixed ${sticky}`;
 
+const menuItems = [{title: 'Home', link: '/'}, {title: 'Venues', link: 'venues'}];
 
 
   return (
@@ -61,39 +57,46 @@ fixed ${sticky}`;
         <NavLink to={"/"}>
           <img src="/holidaze_logo.svg" alt=" logo"></img>
         </NavLink>
-        <div className="flex flex-row gap-6 md:gap-8 justify-center items-center ">
+        <div className="flex flex-row gap-6 md:gap-8 justify-end items-center w-full">
           <nav className="hidden md:flex">
-            <ul className="flex flex-row gap-10 mr-10 ">
+          <ul className="flex flex-row gap-10 mr-10">
+            {menuItems.map((item) => (
               <li className="hover:underline underline-offset-8">
-                <NavLink to={"/products"}>All products</NavLink>
+                 <NavLink  to={item.link}>{item.title}</NavLink>
+    
               </li>
-              <li className="hover:underline underline-offset-8">
-                {" "}
-                <NavLink to={"/contact"}>Contact Us</NavLink>
-              </li>
-            </ul>
+            ))}
+          </ul>
           </nav>
-     
 
-          <div className="relative md:hidden">
+          <div className="relative w-full md:hidden">
             <button
               className="flex justify-center"
               onClick={() => setMenu(!showMenu)}
             >
-              <img src="/burger_menu.svg" alt="Hamburger menu icon" className=""></img>
+              <img
+                src="/burger_menu.svg"
+                alt="Hamburger menu icon"
+                className=""
+              ></img>
             </button>
             {showMenu && (
-              <div className="burger whitespace-nowrap bg-mainGrey border-2 flex justify-center border-mainBeige absolute top-12 -right-2 w-52 h-80 rounded-md z-20 shadow-lg transition ease-in-out delay-500 duration-2000">
+              <div className="burger whitespace-nowrap bg-purpleBlack border-2 flex justify-center border-mainBeige absolute top-0 left-0 w-screen h-screen rounded-md z-20 shadow-lg transition ease-in-out delay-500 duration-2000">
                 <nav className="flex flex-col gap-14 justify-center items-center w-full text-center">
-                  <NavLink to={"/products"}>All products</NavLink>
-                  <NavLink to={"/contact"}>Contact Us</NavLink>
+                <ul className="w-full">
+                  {menuItems.map((item) => (
+                    <li className="hover:underline underline-offset-8 w-full">
+                  <NavLink  to={item.link}>{item.title}</NavLink>
+              </li>
+            ))}
+          </ul>
                 </nav>
               </div>
             )}
           </div>
         </div>
       </header>
-          </>
+    </>
   );
 };
 

@@ -7,19 +7,17 @@ import { register } from "../store/modules/AuthSlice";
 const Register = () => {
   const [successful, setSuccessful] = useState(false);
 
-
   const [showError, setError] = useState(false);
-
 
   const dispatch = useDispatch();
 
-
   const initialValues = {
-    "name": "",
-    "email": "",
-    "avatar": "https://newprofilepic2.photo-cdn.net//assets/images/article/profile.jpg",
-    "venueManager": false,
-    "password": ""
+    name: "",
+    email: "",
+    avatar:
+      "https://newprofilepic2.photo-cdn.net//assets/images/article/profile.jpg",
+    venueManager: false,
+    password: "",
   };
 
   const validationSchema = Yup.object().shape({
@@ -28,9 +26,7 @@ const Register = () => {
         "len",
         "The username must be between 3 and 20 characters.",
         (val) =>
-          val &&
-          val.toString().length >= 3 &&
-          val.toString().length <= 20
+          val && val.toString().length >= 3 && val.toString().length <= 20
       )
       .required("This field is required!"),
     email: Yup.string()
@@ -41,9 +37,7 @@ const Register = () => {
         "len",
         "The password must be between 6 and 40 characters.",
         (val) =>
-          val &&
-          val.toString().length >= 6 &&
-          val.toString().length <= 40
+          val && val.toString().length >= 6 && val.toString().length <= 40
       )
       .required("This field is required!"),
   });
@@ -51,23 +45,21 @@ const Register = () => {
   const handleRegister = (formValue) => {
     const { name, email, password } = formValue;
 
-
     setSuccessful(false);
 
     dispatch(register({ name, email, password }))
       .unwrap()
       .then((data) => {
-        console.log(data)
+        console.log(data);
         setSuccessful(true);
       })
       .catch((error) => {
-        console.log(error)
-        if (error === 'Profile already exists') {
-            setError(true)
+        console.log(error);
+        if (error === "Profile already exists") {
+          setError(true);
         }
-   
-        setSuccessful(false);
 
+        setSuccessful(false);
       });
   };
 
@@ -122,16 +114,21 @@ const Register = () => {
                 </div>
 
                 <div className="form-group">
-                  <button type="submit" className="btn btn-primary btn-block">Sign Up</button>
+                  <button type="submit" className="btn btn-primary btn-block">
+                    Sign Up
+                  </button>
                 </div>
               </div>
             )}
           </Form>
         </Formik>
       </div>
-      {showError && <div><p>Profile already exists/some error, go to login</p></div>}
+      {showError && (
+        <div>
+          <p>Profile already exists/some error, go to login</p>
+        </div>
+      )}
     </div>
-
   );
 };
 

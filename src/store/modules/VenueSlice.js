@@ -6,7 +6,6 @@ const venuesSlice = createSlice({
   initialState: {
     venues: [],
     singleVenue: null,
-
   },
   reducers: {
     SET_VENUES: (state, action) => {
@@ -20,8 +19,7 @@ const venuesSlice = createSlice({
 
 export default venuesSlice.reducer;
 
-const { SET_VENUES, SET_SINGLE_VENUE,  } =
-venuesSlice.actions;
+const { SET_VENUES, SET_SINGLE_VENUE } = venuesSlice.actions;
 
 export const getVenues = () => async (dispatch) => {
   axios({
@@ -45,7 +43,7 @@ export const getSingleVenue = (id) => async (dispatch) => {
   })
     .then(function (response) {
       let data = response.data;
-      console.log(data)
+      console.log(data);
 
       dispatch(SET_SINGLE_VENUE(data));
     })

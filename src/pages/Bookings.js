@@ -5,21 +5,18 @@ import { getBookings } from "../store/modules/BookingSlice";
 
 const Bookings = () => {
   const dispatch = useDispatch();
-  const { bookings } = useSelector((state) => state.bookings); 
+  const { bookings } = useSelector((state) => state.bookings);
 
   useEffect(() => {
     dispatch(getBookings());
   }, [dispatch]);
 
-
-  console.log(bookings)
+  console.log(bookings);
 
   return (
     <>
       <section className="mx-10 md:mx-16 lg:mx-52 relative">
-        <div>
-
-        </div>
+        <div></div>
         <div className="flex flex-row justify-between items-center mb-12">
           <h1 className="">Bookings</h1>
         </div>
@@ -32,14 +29,12 @@ const Bookings = () => {
               <p>{booking.guests}</p>
               <p>{booking.venue.name}</p>
 
-
               <div className="mt-4 flex flex-col justify-end items-start gap-3">
                 <div>
                   <p className="pTitle text-md text-gray-700 ">
                     <Link to={`/venues/${booking.id}`}>{booking.id} </Link>
                   </p>
                 </div>
-             
               </div>
             </div>
           ))}

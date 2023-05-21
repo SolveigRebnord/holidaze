@@ -7,11 +7,11 @@ import ProfilesSlice from "./modules/ProfilesSlice";
 import MenuSlice from "./modules/MenuSlice";
 
 const reducer = combineReducers({
-    venues: VenueSlice,
-    bookings: BookingSlice,
-    auth: AuthSlice,
-    profiles: ProfilesSlice,
-    menu: MenuSlice
+  venues: VenueSlice,
+  bookings: BookingSlice,
+  auth: AuthSlice,
+  profiles: ProfilesSlice,
+  menu: MenuSlice,
 });
 const index = configureStore({
   reducer,

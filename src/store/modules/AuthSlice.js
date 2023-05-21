@@ -10,14 +10,12 @@ export const register = createAsyncThunk(
       const response = await authService.register(name, email, password);
       return response.data;
     } catch (error) {
-      
       if (error.response) {
         console.log(error.response.data.errors[0].message);
-      }  else {
-        console.log('Error', error.message);
+      } else {
+        console.log("Error", error.message);
       }
       return thunkAPI.rejectWithValue(error.response.data.errors[0].message);
-
     }
   }
 );
@@ -29,21 +27,19 @@ export const login = createAsyncThunk(
       const data = await authService.login(email, password);
       return { user: data };
     } catch (error) {
-      console.log(error)
+      console.log(error);
       return thunkAPI.rejectWithValue(error.response.data.errors[0].message);
     }
   }
 );
 
-
 export const logout = createAsyncThunk("auth/logout", () => {
-   authService.logout();
+  authService.logout();
 });
 
 const initialState = user
   ? { isLoggedIn: true, user }
   : { isLoggedIn: false, user: null };
-
 
 const authSlice = createSlice({
   name: "auth",
@@ -69,7 +65,5 @@ const authSlice = createSlice({
     },
   },
 });
-
-
 
 export default authSlice.reducer;
