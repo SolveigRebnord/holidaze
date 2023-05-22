@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, Navigate } from "react-router-dom";
 import { getSingleProfile } from "../store/modules/ProfilesSlice";
 import { getFilteredBookings } from "../store/modules/BookingSlice";
-import FadeIn from "react-fade-in/lib/FadeIn";
 import { useState } from "react";
 import React from "react";
 import Menu from "../components/Menu";
@@ -62,31 +61,6 @@ const Account = () => {
     }
   }, [dispatch, name]);
 
-  function FadeInSection(props) {
-    const [isVisible, setVisible] = React.useState(true);
-    const domRef = React.useRef();
-    React.useEffect(() => {
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-          setVisible(entry.isIntersecting);
-        });
-      });
-
-      const { current } = domRef;
-      observer.observe(current);
-
-      return () => observer.unobserve(current);
-    }, []);
-    return (
-      <section
-        className={`fade-in-section ${isVisible ? "is-visible" : ""}`}
-        ref={domRef}
-      >
-        {props.children}
-      </section>
-    );
-  }
-
   const timeDiff = (startDate, endDate) => {
 
   let start = dayjs(startDate)
@@ -110,10 +84,9 @@ const Account = () => {
         <>
             {/* Profile Info component */}
           <section className="absolute top-52 left-1/2 -translate-x-1/2 w-full  lg:w-1/2 flex flex-col-reverse md:flex-row items-center justify-center md:gap-32">
-            <FadeIn delay={400}>
               <ul className=" flex flex-col gap-8 items-center text-sm pt-12 font-montS w-52">
               {menuItems.map((item) => (
-                <FadeIn delay={600}>
+                <div>
                 {item.id === 3 ?  <li
                   className={'cursor-pointer p-4 w-40 mx-auto flex flex-row items-center justify-center gap-2 text-center border border-purpleBlack'}
                   id={item.id} 
@@ -136,18 +109,15 @@ const Account = () => {
                     {item.id === 2 && <span>( {singleProfile.venues.length} )</span> }
                     {item.id === 3 && <span>+</span> }
                 </li> }
-              </FadeIn>
+              </div>
               ))}
               </ul>
-            </FadeIn>
-            <FadeIn delay={200}>
               <div className="bg-white flex flex-col gap-4 px-10 py-12 w-fit shadow-xl drop-shadow-md relative">
                 <div className="text-right ">
                   <button className="absolute top-4 right-4 ">
                     <img src="/gear.svg" />
                   </button>
                 </div>
-                <FadeIn transitionDuration={1000}>
                   <div className="flex flex-row gap-8 items-end">
                     {name ? (
                       <h1 className="font-semibold text-xl">
@@ -162,7 +132,6 @@ const Account = () => {
                       className="h-24 w-24 object-cover object-center rounded-full"
                     />
                   </div>
-                </FadeIn>
                 <div className="flex flex-col gap-4">
                   <hr className=" bg-gray-300 shadow-none border-none h-[1px] mt-10" />
                   <span className="flex flex-col items-end text-sm">
@@ -185,7 +154,6 @@ const Account = () => {
                   <hr className=" bg-gray-300 shadow-none border-none h-[1px]" />
                 </div>
               </div>
-            </FadeIn>
           </section>
 
           <div ref={myRef} className=" block"></div>
