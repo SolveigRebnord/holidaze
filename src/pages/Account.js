@@ -34,7 +34,7 @@ const Account = () => {
 
   const [activeIndex, setActiveIndex] = useState(0);
   const [active, setActive] = useState(null);
-  const menuItems = [{title: 'Upcoming Bookings', id: 1}, {title: 'Your venues', id: 2}];
+  const menuItems = [{title: 'Upcoming Bookings', id: 1}, {title: 'Your venues', id: 2}, {title: 'Add new venue', id: 3}];
 
 
   function handleClick(id) {
@@ -114,6 +114,17 @@ const Account = () => {
               <ul className=" flex flex-col gap-8 items-center text-sm pt-12 font-montS w-52">
               {menuItems.map((item) => (
                 <FadeIn delay={600}>
+                {item.id === 3 ?  <li
+                  className={'cursor-pointer p-4 w-40 mx-auto flex flex-row items-center justify-center gap-2 text-center border border-purpleBlack'}
+                  id={item.id} 
+                  key={item.id}   
+                  onClick={(id) => {handleClick(id)}}>
+                  
+                  <span className="flex flex-col justify-center">
+                    <span>+</span> 
+                    {item.title}
+                  </span>
+                </li> :
                 <li
                   className={`cursor-pointer p-4 w-64 mx-auto flex flex-row items-center justify-center gap-2 text-center ${active == item.id && 'm-active'}`}
                   id={item.id} 
@@ -123,7 +134,8 @@ const Account = () => {
                     {item.title} 
                     {item.id === 1 && <span>( {singleProfile.bookings.length} )</span> } 
                     {item.id === 2 && <span>( {singleProfile.venues.length} )</span> }
-                </li>
+                    {item.id === 3 && <span>+</span> }
+                </li> }
               </FadeIn>
               ))}
               </ul>

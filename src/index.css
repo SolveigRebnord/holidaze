@@ -11,6 +11,15 @@ ul.indicators {
   padding: 0;
 }
 
+[type=radio]:checked + img {
+  @apply outline outline-2 outline-offset-2 outline-passionOrange 
+}
+
+.orangeBtn {
+  @apply bg-passionOrange px-14 py-3 text-purpleBlack font-montS text-xs uppercase mx-auto block font-bold
+}
+
+
 .m-active {
   @apply bg-passionOrange w-screen md:bg-inherit md:w-64 md:border border-passionOrange border-solid;
 }

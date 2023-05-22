@@ -5,6 +5,8 @@ import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 
 import { login } from "../store/modules/AuthSlice";
+import Register from "./Register";
+import SignUp from "../components/signup/SignUp";
 
 const Login = () => {
   let navigate = useNavigate();
@@ -14,6 +16,9 @@ const Login = () => {
   const { isLoggedIn } = useSelector((state) => state.auth);
 
   const [showError, setError] = useState(false);
+
+  const [showRegister, setRegister] = useState(false);
+
 
   const dispatch = useDispatch();
 
@@ -48,39 +53,42 @@ const Login = () => {
     return <Navigate to="/" />;
   }
 
+   
+
   return (
-    <div className="col-md-12 pt-32 login-form">
-      <div className="card card-container">
+    <div className="pt-32 login-form bg-purpleBlack">
+      <div className="">
+        <h1 className="text-white font-passionOne text-2xl text-center tracking-wider uppercase">Sign In</h1>
         <Formik
           initialValues={initialValues}
           validationSchema={validationSchema}
           onSubmit={handleLogin}
         >
-          <Form>
-            <div className="form-group">
-              <label htmlFor="email">email</label>
-              <Field name="email" type="text" className="form-control" />
+          <Form className="mx-6 font-montS flex flex-col gap-8 my-12"> 
+            <div className="form-group flex-col flex gap-2">
+              <label htmlFor="email" className="text-white">Email</label>
+              <Field name="email" type="text" className="form-control h-14 w-full rounded-md px-4" />
               <ErrorMessage
                 name="email"
                 component="div"
-                className="alert alert-danger"
+                className="alert text-white"
               />
             </div>
 
-            <div className="form-group">
-              <label htmlFor="password">Password</label>
-              <Field name="password" type="password" className="form-control" />
+            <div className="form-group flex-col flex gap-2">
+              <label htmlFor="password" className="text-white">Password</label>
+              <Field name="password" type="password" className="form-control  h-14 w-full rounded-md" />
               <ErrorMessage
                 name="password"
                 component="div"
-                className="alert alert-danger"
+                className="alert text-white"
               />
             </div>
 
             <div className="form-group">
               <button
                 type="submit"
-                className="btn btn-primary btn-block"
+                className="text-white"
                 disabled={loading}
               >
                 {loading && (
@@ -96,6 +104,17 @@ const Login = () => {
             )}
           </Form>
         </Formik>
+
+        <div className="text-white">
+          <h2 className="text-center">
+            Dont have an account? 
+            <button onClick={() => setRegister(true)} className="block mx-auto ">Register now</button>
+            to book your next holiday destination!</h2>
+        </div>
+
+        {showRegister && 
+       <SignUp/>
+        }
       </div>
     </div>
   );

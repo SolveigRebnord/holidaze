@@ -6,7 +6,7 @@ import { useLocation } from "react-router-dom";
 import { useFormik, FormikProvider, useField } from "formik";
 import * as yup from "yup"; 
 import {useState, React} from 'react';
-
+import Hero from "../components/shared/Hero";
 
 const Venues = () => {
   const dispatch = useDispatch();
@@ -75,102 +75,12 @@ else {
         
       });
 
-      {/* Live feedback component */}
-      const TextInputLiveFeedback = ({ label, helpText, ...props }) => {
-        const [field, meta] = useField(props);
-      
-        const [didFocus, setDidFocus] = React.useState(false);
-        const handleFocus = () => setDidFocus(true);
-        const handleChange = () => handleChange();
-        const showFeedback =
-          (!!didFocus && field.value.trim().length > 2) || meta.touched;
-      
-        const [isShown, setIsShown] = useState(false);
-      
-        return (
-          <div
-            className={`form-control ${
-              showFeedback ? (meta.error ? "invalid" : "valid") : ""
-            }`}
-          >
-            <div className="flex items-center justify-between flex-row text-lg font-semibold my-3">
-              <label htmlFor={props.id}>{label}</label>
-              <div
-                className="text-sm font-light text-gray-600 "
-                id={`${props.id}-help`}
-                tabIndex="-1"
-              >
-                <div className="relative">
-                  <button
-                    className=" "
-                    onMouseEnter={() => setIsShown(true)}
-                    onMouseLeave={() => setIsShown(false)}
-                  >
-                    <img src="/question.svg" className="w-6"></img>
-                  </button>
-                  {isShown && (
-                    <div className="min-w-fit whitespace-nowrap bg-white absolute bottom-2 right-8 z-2">
-                      {helpText}
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-            {field.name !== "message" ? (
-              <div>
-                <input
-                  className="border border-gray-200 px-2 rounded-md w-full h-10 "
-                  {...props}
-                  {...field}
-                  value={initialVal}
-                  aria-describedby={`${props.id}-feedback ${props.id}-help`}
-                  onFocus={handleFocus}
-                />
-              </div>
-            ) : (
-              <div>
-                <textarea
-                  className="border border-gray-200 px-2 rounded-md w-full "
-                  {...props}
-                  {...field}
-                  maxLength={500}
-                  aria-describedby={`${props.id}-feedback ${props.id}-help`}
-                  onFocus={handleFocus}
-                />
-              </div>
-            )}
-            <div className="h-6 pt-1 ">
-              {" "}
-              {showFeedback ? (
-                <div
-                  id={`${props.id}-feedback`}
-                  aria-live="polite"
-                  className="feedback text-sm pl-1 text-orange-600"
-                >
-                  {meta.error ? meta.error : "✓"}
-                </div>
-              ) : null}
-            </div>
-          </div>
-        );
-      };
-    
    
 
   return (
     <>
     {/* Hero */}
-      <section className="relative z-0">
-        <img
-          src="/mountain_resort.jpg"
-          className="h-[500px] min-w-full object-cover lg:h-[300px]"
-        ></img>
-        <h1 className="font-passionOne uppercase absolute bottom-8 text-[40px] left-1/2 -translate-x-1/2 leading-none text-white text-center">
-          Venues
-        </h1>
-      </section>
-
-     
+    <Hero img={"/mountain_resort.jpg"} text={'Venues'}></Hero>
       <section className=" relative pt-4">
         {!currentUser && (
           <span className="absolute w-full bg-red-300 top-0">

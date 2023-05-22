@@ -1,10 +1,14 @@
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, json, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import React from "react";
 import { useState, useEffect } from "react";
 
 const Header = () => {
   const [showMenu, setMenu] = useState(false);
+
+  const { user: currentUser } = useSelector((state) => state.auth);
+  let username;
+  (currentUser ? username = currentUser.name : username = 'Log In')
 
   const { pathname } = useLocation();
   useEffect(() => {
@@ -48,7 +52,7 @@ font-montS
 text-sm
 fixed ${sticky}`;
 
-const menuItems = [{title: 'Home', link: '/'}, {title: 'Venues', link: 'venues'}];
+const menuItems = [{title: 'Home', link: '/'}, {title: 'Venues', link: 'venues'}, {title: <img src="profile_icon.svg" className="w-5" />, link: 'account'}, {title: username, link: 'account'}];
 
 
   return (
@@ -59,9 +63,9 @@ const menuItems = [{title: 'Home', link: '/'}, {title: 'Venues', link: 'venues'}
         </NavLink>
         <div className="flex flex-row gap-6 md:gap-8 justify-end items-center w-full">
           <nav className="hidden md:flex">
-          <ul className="flex flex-row gap-10 mr-10">
+          <ul className="flex flex-row gap-14 mr-2">
             {menuItems.map((item) => (
-              <li className="hover:underline underline-offset-8">
+              <li className="hover:underline underline-offset-8 last-of-type:-ml-12">
                  <NavLink  to={item.link}>{item.title}</NavLink>
     
               </li>

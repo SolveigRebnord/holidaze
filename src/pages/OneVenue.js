@@ -5,6 +5,7 @@ import { getSingleVenue } from "../store/modules/VenueSlice";
 import { Slide } from "react-slideshow-image";
 import "react-slideshow-image/dist/styles.css";
 import Slider from '../components/shared/Slider'
+import Hero from "../components/shared/Hero";
 
 const OneVenue = () => {
   const dispatch = useDispatch();
@@ -21,16 +22,7 @@ const OneVenue = () => {
     <>
       {singleVenue && (
         <section className="">
-              {/* Hero */}
-          <section className="relative z-0 mb-12">
-            <img
-              src="/plants.jpg"
-              className="h-[300px] min-w-full object-cover object-bottom"
-            ></img>
-            <h1 className="font-passionOne uppercase absolute bottom-8 text-[40px] left-1/2 -translate-x-1/2 leading-none text-white text-center">
-              {singleVenue.name}
-            </h1>
-          </section>
+          <Hero img={"/plants.jpg"} text={singleVenue.name}></Hero>
           <section className="flex flex-col lg:flex-row justify-center lg:gap-20 lg:p-20 lg:px-32">
                {/* One Venue component */}
             <div className="lg:w-1/2">

@@ -2,19 +2,31 @@ import {useState, React} from 'react';
 import { useFormik, FormikProvider, useField } from "formik";
 import * as yup from "yup"; 
 import { Link, NavLink, useNavigate } from 'react-router-dom';
+import CountryList from './CountryList';
+import CalendarPick from './shared/CalendarPick';
 
 const HomeSearch = () => {
+
+  const [inputText, setInputText] = useState("");
+
+  const searching = (e) => {
+    let lowerCase = e.target.value.toLowerCase();
+    setInputText(lowerCase);
+
+  };
 
     const data = ['hei', 'ho']
 
     const [date, setDate] = useState(new Date())
     const [showTime, setShowTime] = useState(false) 
     const [value, onChange] = useState([new Date(), new Date()]);
+    const [showCalendar, setShowCalendar] = useState(false)
   
     const selectionRange = {
       startDate: new Date(),
       endDate: new Date(),
       key: 'selection',
+      
     }
 
     const navigate = useNavigate();
@@ -29,8 +41,7 @@ const HomeSearch = () => {
 
     const validationSchema = yup.object({
         place: yup
-          .string()
-          ,
+          .string(),
           startDate: yup
           .string(),
           endDate: yup
@@ -43,94 +54,23 @@ const HomeSearch = () => {
     const formik = useFormik({
         initialValues: {
           place: "",
-          startDate: "",
-          endDate: ""
+          startDate: date,
+          endDate: date
         },
         validationSchema,
         onSubmit: (values) => {
           console.log(values);
-          newPage(values)
+          //newPage(values)
          
         },
       });
 
-      const TextInputLiveFeedback = ({ label, helpText, ...props }) => {
-        const [field, meta] = useField(props);
-      
-        const [didFocus, setDidFocus] = React.useState(false);
-        const handleFocus = () => setDidFocus(true);
-        const handleChange = () => handleChange();
-        const showFeedback =
-          (!!didFocus && field.value.trim().length > 2) || meta.touched;
-      
-        const [isShown, setIsShown] = useState(true);
-      
-        return (
-          <div
-            className={`form-control ${
-              showFeedback ? (meta.error ? "invalid" : "valid") : ""
-            }`}
-          >
-            <div className="flex items-center justify-between flex-row text-lg font-semibold my-3">
-              <label htmlFor={props.id}>{label}</label>
-              <div
-                className="text-sm font-light text-gray-600 "
-                id={`${props.id}-help`}
-                tabIndex="-1"
-              >
-                <div className="relative">
-                  <button
-                    className=" "
-                    onMouseEnter={() => setIsShown(true)}
-                    onMouseLeave={() => setIsShown(false)}
-                  >
-                    <img src="/question.svg" className="w-6"></img>
-                  </button>
-                  {isShown && (
-                    <div className="min-w-fit whitespace-nowrap bg-white absolute bottom-2 right-8 z-2">
-                      {helpText}
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-            {field.name !== "message" ? (
-              <div>
-                <input
-                  className="border border-gray-200 px-2 rounded-md w-full h-10 "
-                  {...props}
-                  {...field}
-                  aria-describedby={`${props.id}-feedback ${props.id}-help`}
-                  onFocus={handleFocus}
-                />
-              </div>
-            ) : (
-              <div>
-                <textarea
-                  className="border border-gray-200 px-2 rounded-md w-full "
-                  {...props}
-                  {...field}
-                  maxLength={500}
-                  aria-describedby={`${props.id}-feedback ${props.id}-help`}
-                  onFocus={handleFocus}
-                />
-              </div>
-            )}
-            <div className="h-6 pt-1 ">
-              {" "}
-              {showFeedback ? (
-                <div
-                  id={`${props.id}-feedback`}
-                  aria-live="polite"
-                  className="feedback text-sm pl-1 text-orange-600"
-                >
-                  {meta.error ? meta.error : "✓"}
-                </div>
-              ) : null}
-            </div>
-          </div>
-        );
-      };
+
+   const closeCalendar = (bool) => {
+        setShowCalendar(bool)
+   }
+   
+   console.log(selectionRange)
     
    
     return (  
@@ -142,24 +82,26 @@ const HomeSearch = () => {
           <form
             onSubmit={formik.handleSubmit}
             onChange={formik.handleChange}
-            className="my-16 lg:mt-8"
-          >
-             <input 
-                className="bg-purpleBlack opacity-90 w-full h-16 rounded-md text-white shadow-md placeholder:italic font-montS placeholder:text-white px-6 "
-                placeholder="Where are we going?"
-                value={formik.values.place}
+            className="my-6 flex flex-col gap-8">
+             <input
+                onKeyUp={(event) => searching(event)}
+                type='text'
                 id='place'
-                ></input>
-                <div className="flex flex-row gap-6 mx-6 md:mx-auto md:w-2/3 ">
+                value={formik.values.place}
+                className="bg-purpleBlack opacity-90 w-full h-16 rounded-md text-white shadow-md placeholder:italic font-montS placeholder:text-gray-500 px-6 " placeholder='Where are we going?'
+              ></input>
+              {inputText && <CountryList input={inputText} />}
+                <div className="flex flex-row gap-6 mx-6 md:mx-auto md:w-2/3 relative">
                  {/* Calendar component */}
-                <div className="flex flex-row ">
-                    <input value={formik.values.startDate} id='startDate' className="bg-purpleBlack opacity-90 w-full h-14 rounded-l-md text-white shadow-md placeholder:italic font-montS placeholder:text-white px-4 border-white border-r-2"></input>
-                    <input value={formik.values.endDate} id='endDate' className="bg-purpleBlack opacity-90 w-full h-14 rounded-r-md text-white shadow-md placeholder:italic font-montS placeholder:text-white px-4 "></input>
+                <div className="flex flex-row gap-2">
+                  <button onClick={() => setShowCalendar(!showCalendar)} >Calendar</button>
                 </div>
-                <button type='submit'>
-                    venue
-                </button>
+                {showCalendar && <CalendarPick />}
                 </div> 
+                <button type='submit'>
+                    Check Venues
+                </button>
+     
           </form>
         </FormikProvider>)}
             </div>

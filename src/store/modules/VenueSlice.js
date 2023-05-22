@@ -13,7 +13,7 @@ const venuesSlice = createSlice({
     },
     SET_SINGLE_VENUE: (state, action) => {
       state.singleVenue = action.payload;
-    },
+    }
   },
 });
 
@@ -51,3 +51,4 @@ export const getSingleVenue = (id) => async (dispatch) => {
       console.log(error);
     });
 };
+
