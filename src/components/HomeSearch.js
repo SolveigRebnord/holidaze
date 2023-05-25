@@ -15,7 +15,7 @@ const HomeSearch = () => {
 
   };
 
-    const data = ['hei', 'ho']
+
 
     const [date, setDate] = useState(new Date())
     const [showTime, setShowTime] = useState(false) 

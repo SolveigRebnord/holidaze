@@ -21,7 +21,7 @@ ul.indicators {
 
 
 .m-active {
-  @apply bg-passionOrange w-screen md:bg-inherit md:w-64 md:border border-passionOrange border-solid;
+  @apply bg-passionOrange w-screen md:bg-inherit md:w-64 md:underline underline-offset-8 decoration-passionOrange decoration-4 ;
 }
 
 
