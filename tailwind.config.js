@@ -15,6 +15,9 @@ module.exports = {
         passionOrange: "#E9AD83",
         lightBeige: "#FDF3E8",
       },
+      content: {
+        'img': 'url("../public/profile_icon.svg")',
+      },
     },
     plugins: [],
   },
