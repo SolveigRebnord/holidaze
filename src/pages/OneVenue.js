@@ -27,7 +27,7 @@ const OneVenue = () => {
                {/* One Venue component */}
             <div className="lg:w-1/2">
               <div>
-                <Slider media={singleVenue.media}></Slider>
+                <Slider media={singleVenue.media} site={'venue'}></Slider>
               </div>
               <div className="w-full px-6 md:w-3/4 md:p-0 mx-auto flex flex-col gap-8 my-12">
                 <div className="md:flex flex-row items-center justify-between">

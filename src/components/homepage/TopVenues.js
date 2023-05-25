@@ -1,70 +1,35 @@
-import React, { Component } from "react";
-import { useLocation } from "react-router-dom";
-import { Slide } from "react-slideshow-image";
+import { useEffect, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getVenues } from "../../store/modules/VenueSlice";
 import { Link } from "react-router-dom";
+import Slider from "../shared/Slider";
+import { useMediaQuery } from 'react-responsive';
 
-class Slider extends Component {
 
 
-  constructor() {
-    super();
-    this.slideRef = React.createRef();
-    this.back = this.back.bind(this);
-    this.next = this.next.bind(this);
-    this.state = {
-      current: 0,
-    };
- 
-  }
+const TopVenues = () => {
 
-  back() {
-    this.slideRef.current.goBack();
-  }
+    const dispatch = useDispatch();
+    const { venues } = useSelector((state) => state.venues);
+  
+    useEffect(() => {
+      dispatch(getVenues());
+    }, [dispatch]);
 
-  next() {
-    this.slideRef.current.goNext();
-  }
-
-  render() {
-
+    const firstThree = venues.slice(0, 3);
   
 
+    const isMobile = useMediaQuery({ query: `(max-width: 760px)` });
 
-    const slideImages = this.props.media;
-    let site = this.props.site
-    
-
-    const properties = {
-      duration: 5000,
-      autoplay: false,
-      transitionDuration: 500,
-      arrows: site == 'home' ? false : true || slideImages.length < 1 ? false : true,
-      infinite: slideImages.length > 1 ? true : false,
-      easing: "ease",
-      indicators: true,
-      nextArrow: (
-        <span className="w-fit bg-purpleBlack p-2 h-fit mr-4">
-          <img src="/arrow_white.svg" />
-        </span>
-      ),
-      prevArrow: (
-        <span className="w-fit bg-purpleBlack p-2 h-fit ml-4 rotate-180">
-          <img src="/arrow_white.svg" />
-        </span>
-      ),
-      canSwipe: true,
-    };
-
-    
-
-    return (
-      
-      <div>
-        <div className="slide-container">
-         {site == 'home' && 
-           <Slide ref={this.slideRef} {...properties}>
-           {slideImages.map((venue, index) => (
-             <div
+    return ( 
+        <>
+        <h2 className="my-20 text-center">Our top venues at the moment</h2>
+     
+            {isMobile && <Slider site={'home'} media={firstThree} />}
+            {!isMobile && 
+                <section className="w-2/3 mx-auto flex flex-col gap-12">
+            {firstThree.map((venue, index) => (
+      <div
                key={index}
                className="h-full w-full"
              >
@@ -149,24 +114,14 @@ class Slider extends Component {
         </div>
       </div>
              </div>
-           ))}
-         </Slide>}
-         {site == 'venue' && 
-           <Slide ref={this.slideRef} {...properties}>
-           {slideImages.map((each, index) => (
-             <div
-               key={index}
-               className="each-slide h-full w-full object-cover"
-             >
-               <img className="lazy h-full" src={each} alt="sample" />
-             </div>
-           ))}
-         </Slide>}
-         
-        </div>
-      </div>
-    );
-  }
+             
+             
+  )
+  )}          </section>
 }
-
-export default Slider;
+       
+       
+</>);
+}
+ 
+export default TopVenues;
