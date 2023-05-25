@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import authHeader from "../../services/auth.header";
 
 const venuesSlice = createSlice({
   name: "venues",
@@ -13,13 +14,18 @@ const venuesSlice = createSlice({
     },
     SET_SINGLE_VENUE: (state, action) => {
       state.singleVenue = action.payload;
+    },
+    NEW_VENUE: (state, action) => {
+      state.singleVenue = action.payload;
     }
   },
 });
 
 export default venuesSlice.reducer;
 
-const { SET_VENUES, SET_SINGLE_VENUE } = venuesSlice.actions;
+const { SET_VENUES, SET_SINGLE_VENUE, NEW_VENUE } = venuesSlice.actions;
+
+const header = authHeader();
 
 export const getVenues = () => async (dispatch) => {
   axios({
@@ -52,3 +58,22 @@ export const getSingleVenue = (id) => async (dispatch) => {
     });
 };
 
+
+export const addNewVenue = (venueObject) => async (dispatch) => {
+
+  let body = venueObject
+
+ await axios.post("https://nf-api.onrender.com/api/v1/holidaze/venues", body, {
+    headers: header
+})
+    .then(function (response) {
+      //hvordan få vekk preventDefault her?
+      let data = response.data;
+      //dispatch(EDIT_PROFILE(data));
+     
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+ 
+};

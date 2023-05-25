@@ -5,6 +5,7 @@ import BookingSlice from "./modules/BookingSlice";
 import AuthSlice from "./modules/AuthSlice";
 import ProfilesSlice from "./modules/ProfilesSlice";
 import MenuSlice from "./modules/MenuSlice";
+import ErrorSlice from "./modules/ErrorSlice";
 
 const reducer = combineReducers({
   venues: VenueSlice,
@@ -12,6 +13,7 @@ const reducer = combineReducers({
   auth: AuthSlice,
   profiles: ProfilesSlice,
   menu: MenuSlice,
+  error: ErrorSlice
 });
 const index = configureStore({
   reducer,

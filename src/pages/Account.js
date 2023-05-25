@@ -1,13 +1,18 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, Navigate } from "react-router-dom";
-import { getSingleProfile } from "../store/modules/ProfilesSlice";
+import { editProfile, getSingleProfile } from "../store/modules/ProfilesSlice";
 import { getFilteredBookings } from "../store/modules/BookingSlice";
 import { useState } from "react";
 import React from "react";
 import Menu from "../components/Menu";
 import { useRef } from "react";
 import Slider from '../components/shared/Slider'
+import { Overlay, useComponentVisible } from "../components/profile/Overlay";
+import Error from "../components/shared/Error";
+import { toHaveClass } from "@testing-library/jest-dom/dist/matchers";
+import Hero from "../components/shared/Hero";
+import NewVenue from "../components/profile/NewVenue";
 
 const Account = () => {
   const dispatch = useDispatch();
@@ -23,6 +28,9 @@ const Account = () => {
     window.location.replace("/login");
   }
 
+  const {isError} = useSelector(state => state.error);
+  const {errorMessage} = useSelector(state => state.error);
+
   let name = currentUser.name;
 
   const myRef = useRef(null)
@@ -33,7 +41,9 @@ const Account = () => {
 
   const [activeIndex, setActiveIndex] = useState(0);
   const [active, setActive] = useState(null);
-  const menuItems = [{title: 'Upcoming Bookings', id: 1}, {title: 'Your venues', id: 2}, {title: 'Add new venue', id: 3}];
+
+  let menuItems = [ {title: 'Add new venue'}, {title: 'Upcoming Bookings'}, {title: 'Your venues'}];
+  menuItems = menuItems.map((item, index) => ({ ...item, id: index + 1 }))
 
 
   function handleClick(id) {
@@ -67,56 +77,56 @@ const Account = () => {
   let end = dayjs(endDate)
   let diff = end.diff(start, 'day') 
   return diff;
-
   }
+
+  const [showProfileEdit, setShowProfileEdit] = useState(false);
+  const profileEdit = () => {
+    setShowProfileEdit(true)
+  }
+
+  const [newProfileImg, setnewProfileImg] = useState("");
+
+
 
   return (
     <>
-        {/* Hero */}
-      <section className="relative z-0 mb-96 ">
-        <img
-          src="/palmtree.jpg"
-          className="h-[550px] md:h-[300px] md:min-w-full object-cover object-left"
-        ></img>
-      </section>
+      <Hero img={"/palmtree.jpg"} />
 
       {singleProfile && (
         <>
             {/* Profile Info component */}
-          <section className="absolute top-52 left-1/2 -translate-x-1/2 w-full  lg:w-1/2 flex flex-col-reverse md:flex-row items-center justify-center md:gap-32">
-              <ul className=" flex flex-col gap-8 items-center text-sm pt-12 font-montS w-52">
+          <section className=" absolute top-52 left-1/2 -translate-x-1/2 w-full  lg:w-1/2 flex flex-col-reverse md:flex-row items-center justify-center md:gap-24">
+              <ul className=" flex flex-col gap-8 items-center text-sm pt-12 font-montS w-52 md:mt-20">
               {menuItems.map((item) => (
                 <div>
-                {item.id === 3 ?  <li
-                  className={'cursor-pointer p-4 w-40 mx-auto flex flex-row items-center justify-center gap-2 text-center border border-purpleBlack'}
-                  id={item.id} 
-                  key={item.id}   
-                  onClick={(id) => {handleClick(id)}}>
-                  
-                  <span className="flex flex-col justify-center">
-                    <span>+</span> 
-                    {item.title}
-                  </span>
-                </li> :
                 <li
-                  className={`cursor-pointer p-4 w-64 mx-auto flex flex-row items-center justify-center gap-2 text-center ${active == item.id && 'm-active'}`}
+                  className={`cursor-pointer p-4 w-52 mx-auto flex flex-row items-center justify-center gap-2 text-center ${active == item.id && 'm-active'} ${item.id === 1 && 'bg-passionOrange drop-shadow-md' }`}
                   id={item.id} 
                   key={item.id}   
                   onClick={(id) => {handleClick(id)}}>
-                  
                     {item.title} 
-                    {item.id === 1 && <span>( {singleProfile.bookings.length} )</span> } 
-                    {item.id === 2 && <span>( {singleProfile.venues.length} )</span> }
-                    {item.id === 3 && <span>+</span> }
-                </li> }
+                    {item.id === 2 && ` (${singleProfile.bookings.length})`} 
+                    {item.id === 3 && ` (${singleProfile.venues.length})`}
+               
+                </li> 
               </div>
               ))}
               </ul>
-              <div className="bg-white flex flex-col gap-4 px-10 py-12 w-fit shadow-xl drop-shadow-md relative">
+              <div className="bg-white flex flex-col gap-4 px-10 py-12 w-fit shadow-xl drop-shadow-md ">
                 <div className="text-right ">
-                  <button className="absolute top-4 right-4 ">
-                    <img src="/gear.svg" />
-                  </button>
+                  <Overlay>
+                    <h2>Add a new image url to change your profile picture</h2>
+                    <img
+                      src={singleProfile.avatar}
+                      alt={singleProfile.name}
+                      className="h-32 w-32 object-cover object-center rounded-full drop-shadow-lg"
+                    />
+                    <form>
+                      <input type="text" className="w-full h-10 border border-purpleBlack rounded-md px-4" onChange={(e) => setnewProfileImg(e.target.value)}></input>
+                      <button type="submit" onClick={(e) => {e.preventDefault();dispatch(editProfile(singleProfile.name, newProfileImg))}} className="orangeBtn my-2 ">Add new profile picture</button>
+                    </form>
+                  {isError && <Error message={errorMessage} />}
+                    </Overlay>
                 </div>
                   <div className="flex flex-row gap-8 items-end">
                     {name ? (
@@ -156,11 +166,19 @@ const Account = () => {
               </div>
           </section>
 
-          <div ref={myRef} className=" block"></div>
+          <div ref={myRef} className=" block mt-96"></div>
+          <Menu 
+          title="New Venue" 
+          isActive={activeIndex == 1}
+          amount={null}
+          >
+             <NewVenue />
+          </Menu>
+
           <Menu 
           title="Upcoming bookings" 
-          isActive={activeIndex == 1}
-          amount={singleProfile.bookings.length}
+          isActive={activeIndex == 2}
+          amount={ singleProfile.bookings.length}
           >
             <section className="w-full px-4 pt-10 md:px-8">
               {/* My bookings component */}
@@ -236,7 +254,7 @@ const Account = () => {
 
           <Menu 
           title="Your Venues" 
-          isActive={activeIndex == 2}
+          isActive={activeIndex == 3}
           amount={singleProfile.venues.length}
     >
             <section className="px-4 w-full bg-purpleBlack pt-10"     >
