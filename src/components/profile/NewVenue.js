@@ -7,32 +7,68 @@ import { useState } from "react";
 import { type } from "@testing-library/user-event/dist/type";
 import NewVenueSchema from "../../schemas/NewVenueSchema";
 
+
+
 const onSubmit = (values, actions) => {
-  console.log(values)
+  console.log(values.name)
+  let newVenueBody = {
+    'name': values.name,
+    "description": values.description,
+    "media": values.media,
+    "price": values.price,
+    "maxGuests": values.maxGuests,
+    "rating": values.rating ? values.rating : null,
+    "meta": {
+      "wifi": values.wifi,
+      "parking": values.parking,
+      "breakfast": values.breakfast,
+      "pets": values.pets
+    },
+    "location": {
+      "address": values.address,
+      "city": values.city,
+      "zip": values.zip ? values.zip : null,
+      "country": values.country,
+      "continent": values.continent ? values.continent : null,
+      "lat": values.lat ? values.lat : null,
+      "lat": values.lat ? values.lat : null,
+    }
+  }
+  console.log(newVenueBody)
   //actions.resetForm();
 };
 
 const FormInput = ({ label, type, ...props }) => {
   const [field, meta] = useField(props);
-  console.log(meta.value)
+
 
 
   return (
     <>
-      <label>{label}</label>
+    <div className={`flex flex-col  ${field.name == 'zip' ? 'zip-input' : ''}`}>
+      <label className="text-white font-bold tracking-wide font-montS text-lg bg-opacity-40">{label}</label>
       <input
       type={type}
         {...field}
         {...props}
-        className={meta.touched && meta.error ? "input-error" : ""}
+        className={`form-input
+        ${type=='textarea' ? 'area-input' : ''}
+        ${type=='number' ? 'number-input' : ''}
+        ${type=='checkbox' ? 'check-input' : ''}
+        ${meta.touched && meta.error ? 'input-error' : ''}
+        ${meta.touched && !meta.error && 'input-ok'}`}
       />
-      {meta.touched && meta.error && <div className="error">{meta.error}</div>}
+      </div>
+      <div className="h-8">
+      {meta.touched && meta.error && <p className="text-white text-right ">{meta.error}</p>}
+      </div>
+      
     </>
   );
 };
 
 
-const FormArray = ({ label, type, ...props }) => {
+const FormArray = ({ label, name, type, ...props }) => {
   const [field, meta] = useField(props);
   console.log(field.value.media)
 
@@ -41,7 +77,7 @@ const FormArray = ({ label, type, ...props }) => {
   return (
     <>
    
-<FieldArray name="media"   
+<FieldArray name={name}  
 
 render={arrayHelpers => (
   <div>
@@ -137,9 +173,9 @@ const validationSchema = NewVenueSchema
             onSubmit={onSubmit} 
             >
               {({ isSubmitting }) => (
-        <Form>
+        <Form className="p-12 bg-purpleBlack">
               
-                <div className="flex flex-col gap-12">
+                <div className="flex flex-col gap-4 justify-start">
                   <div className="">
                     <FormInput
                       label="Title"
@@ -167,7 +203,7 @@ const validationSchema = NewVenueSchema
       
                     />
                      <FormInput
-                      label="Number of guests"
+                      label="Maximum number of guests"
                       id="maxGuests"
                       name="maxGuests"
                       type="number"
@@ -180,6 +216,7 @@ const validationSchema = NewVenueSchema
                     />
                     </div>
                     
+                    <div className="flexR my-12">
                     {initMeta.map((fac) => (
                      <FormInput 
                     label={fac}  
@@ -188,6 +225,8 @@ const validationSchema = NewVenueSchema
                     type="checkbox"
                       />
                     ))}
+                    </div>
+                  
 
                     <div>
                     <FormInput
@@ -233,7 +272,7 @@ const validationSchema = NewVenueSchema
                       name="lat"
                       type="number"
                     />
-                    <FormArray />
+                    <FormArray name='media' />
                 
 
                     </div>
