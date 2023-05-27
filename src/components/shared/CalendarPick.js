@@ -22,7 +22,6 @@ const CalendarPick = ({ ranges, onChange, formik, ...rest }) => {
 
      const handleSelect = ranges => {
           setSelectedDateRange(ranges.selection);
-          console.log(ranges.selection);
      };
 
 

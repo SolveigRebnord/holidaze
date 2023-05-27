@@ -51,7 +51,7 @@ const HomeSearch = () => {
     const [isForm, setForm] = useState(true);
     const [isConfirmation, setConfirmation] = useState(false);
   
-    const formik = useFormik({
+    const {values, handleBlur, handleSubmit, handleChange} = useFormik({
         initialValues: {
           place: "",
           startDate: date,
@@ -64,13 +64,13 @@ const HomeSearch = () => {
          
         },
       });
+   
 
 
    const closeCalendar = (bool) => {
         setShowCalendar(bool)
    }
    
-   console.log(selectionRange)
     
    
     return (  
@@ -78,16 +78,17 @@ const HomeSearch = () => {
             <div className="mx-4 my-8 flex flex-col gap-6 md:mx-auto md:w-2/3 lg:hidden">
                 {/* Locations from venues store */}
                 {isForm && (
-        <FormikProvider value={formik}>
+        <FormikProvider value={values}>
           <form
-            onSubmit={formik.handleSubmit}
-            onChange={formik.handleChange}
+            onSubmit={handleSubmit}
+            onChange={handleChange}
             className="my-6 flex flex-col gap-8">
              <input
+             onChange={handleChange}
                 onKeyUp={(event) => searching(event)}
                 type='text'
                 id='place'
-                value={formik.values.place}
+                value={values.place}
                 className="bg-purpleBlack opacity-90 w-full h-16 rounded-md text-white shadow-md placeholder:italic font-montS placeholder:text-gray-500 px-6 " placeholder='Where are we going?'
               ></input>
               {inputText && <CountryList input={inputText} />}

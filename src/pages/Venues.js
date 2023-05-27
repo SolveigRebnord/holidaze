@@ -1,12 +1,13 @@
 import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, createRoutesFromChildren } from "react-router-dom";
 import { getVenues } from "../store/modules/VenueSlice";
 import { useLocation } from "react-router-dom";
 import { useFormik, FormikProvider, useField } from "formik";
 import * as yup from "yup"; 
 import {useState, React} from 'react';
 import Hero from "../components/shared/Hero";
+import Filter from "../components/venues/Filter";
 
 const Venues = () => {
   const dispatch = useDispatch();
@@ -20,6 +21,11 @@ const Venues = () => {
   const { user: currentUser } = useSelector((state) => state.auth);
   const location = useLocation();
 
+  const [maxGuestsFilter, setMaxGuestsFilter] = useState("");
+  const [  priceFilter, setPriceFilter] = useState("");
+
+
+  
   
   {/* If search data from Home */}
 let homeData = location.state
@@ -55,6 +61,8 @@ else {
     const validationSchema = yup.object({
         place: yup
           .string()
+          .required('oh no')
+          .min(3)
           ,
           startDate: yup
           .string(),
@@ -66,16 +74,25 @@ else {
     const [isConfirmation, setConfirmation] = useState(false);
   
     const formik = useFormik({
-        initialValues: initialVal,
+      initialValues: {
+        place: "",
+        startDate: "",
+        endDate: ""
+      },
         validationSchema,
-        onSubmit: (values) => {
+        onSubmit: (values, actions) => {
           console.log(values);
+          //setForm(false)
+          //actions.resetForm()
          
         },
         
+        
       });
 
-   
+      (formik.errors && console.log(formik.errors))
+
+
 
   return (
     <>
@@ -117,20 +134,33 @@ else {
               ></input>
             </div>
             <hr className="bg-black my-2"></hr>
-            <input id="place" value={initPlace}
+            <input id="place" value={initPlace} 
+            onBlur={formik.handleBlur}
+           
               className="p-2 w-full text-right"
             ></input>
-            <button type="submit">Search</button>
+             {formik.errors.place && formik.touched.place && <p>{formik.errors.place}</p> }
+             
+            <button disabled={formik.isSubmitting} className={formik.isSubmitting && 'text-red-300'} type="submit">Search</button>
            </form>
         </FormikProvider>)}
         </section>
     
         {/* Filter/Sort component */}
         <div className="flexR my-8 mx-6 md:w-2/3 lg:w-1/2 md:mx-auto">
-          <button className="bg-white border border-purpleBlack w-40 p-2 h-12 text-sm flexR">
-            Filter
-            <img src="/filter.svg" className="w-6" />
-          </button>
+          <Filter >
+            <div>
+              <p>Filter</p>
+              <input type="range" id="maxGuestsFilter" onChange={(e) => setMaxGuestsFilter(e.target.value)} min={1} max={100} step={1}></input>
+              <p>{maxGuestsFilter}</p>
+
+              <input type="range" id="priceFilter" onChange={(e) => setPriceFilter(e.target.value)} min={1} max={10000} step={1} className="w-96"></input>
+              <p>{priceFilter}</p>
+
+              <label>Wifi</label>
+              <input type="checkbox" id="wifiFilter" ></input>
+            </div>
+          </Filter>
           <button className="bg-white border border-purpleBlack w-40 p-2 h-12 text-sm flexR">
             Sort
             <img src="/sort.svg" className="w-6" />
