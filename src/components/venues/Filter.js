@@ -1,10 +1,6 @@
 import React, { useRef, useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
 
-
-const Overlay = (props) => {
-
-
+const Filter = (props) => {
 
     const [isComponentVisible, setIsComponentVisible] = useState(false);
     const ref = useRef(null);
@@ -15,6 +11,9 @@ const Overlay = (props) => {
         }
     };
 
+
+
+
     useEffect(() => {
         document.addEventListener('click', handleClickOutside, true);
         return () => {
@@ -24,12 +23,14 @@ const Overlay = (props) => {
 
     return (
        <div ref={ref}>
-         <button onClick={() => setIsComponentVisible(true)} className="absolute top-4 right-4 ">
-                    <img src="/gear.svg" />
+         <button onClick={() => setIsComponentVisible(true)} className="bg-white border border-purpleBlack w-40 p-2 h-12 text-sm flexR">
+                    <img src="/filter.svg" className="w-6" />
+                    Filter
                   </button>
           {isComponentVisible && 
           <section className="fixed w-full left-0 top-0 h-full z-20 bg-white flex flex-col items-center justify-start p-8 gap-6">
             {props.children}
+            <button onClick={() => setIsComponentVisible(false)}>X</button>
         </section>}
        </div>
     );
@@ -38,4 +39,5 @@ const Overlay = (props) => {
  
 
 
-export {Overlay} ;
+export default Filter ;
+
