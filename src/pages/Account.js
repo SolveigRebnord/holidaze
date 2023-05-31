@@ -13,12 +13,18 @@ import Error from "../components/shared/Error";
 import { toHaveClass } from "@testing-library/jest-dom/dist/matchers";
 import Hero from "../components/shared/Hero";
 import NewVenue from "../components/profile/NewVenue";
+import EditVenue from "../components/profile/EditVenue";
+import { isAction } from "@reduxjs/toolkit";
+import { addNewVenue, deleteVenue, editVenue } from "../store/modules/VenueSlice"
+
 
 const Account = () => {
   const dispatch = useDispatch();
 
   const { user: currentUser } = useSelector((state) => state.auth);
   const { singleProfile } = useSelector((state) => state.profiles);
+  const { userVenues } = useSelector((state) => state.profiles);
+
 
   const dayjs = require('dayjs')
   dayjs().format('DD/MM/YYYY')
@@ -33,6 +39,7 @@ const Account = () => {
 
   let name = currentUser.name;
 
+
   const myRef = useRef(null)
 
   const ref2 = useRef(null)
@@ -41,12 +48,17 @@ const Account = () => {
 
   const [activeIndex, setActiveIndex] = useState(0);
   const [active, setActive] = useState(null);
+  const [refreshState, setRefreshState] = useState(true);
+  const [fixVenue, setfixVenue] = useState("");
+
 
   let menuItems = [ {title: 'Add new venue'}, {title: 'Upcoming Bookings'}, {title: 'Your venues'}];
   menuItems = menuItems.map((item, index) => ({ ...item, id: index + 1 }))
 
 
   function handleClick(id) {
+    console.log(id)
+
     let number = id.target.id;
     if (number === activeIndex) {
       setActiveIndex(0);
@@ -59,6 +71,13 @@ const Account = () => {
     }
   }
 
+  function goToSection (id) {
+    let number = id
+    setActiveIndex(number);
+    setActive(number);
+    executeScroll(number);
+  }
+
   const executeScroll = (id) => {
     let secRef = `ref${id}`
     myRef.current.scrollIntoView({behavior: "smooth", block: "start"})    
@@ -69,7 +88,8 @@ const Account = () => {
     if (name) {
       dispatch(getSingleProfile(name));
     }
-  }, [dispatch, name]);
+  }, [dispatch, name],);
+
 
   const timeDiff = (startDate, endDate) => {
 
@@ -165,14 +185,15 @@ const Account = () => {
                 </div>
               </div>
           </section>
-
-          <div ref={myRef} className=" block mt-96"></div>
+          
+          <div ref={myRef} className=" block mt-96 "></div>
+          
           <Menu 
           title="New Venue" 
           isActive={activeIndex == 1}
           amount={null}
           >
-             <NewVenue />
+             <NewVenue goToSection={goToSection} setRefreshState={setRefreshState} />
           </Menu>
 
           <Menu 
@@ -257,36 +278,36 @@ const Account = () => {
           isActive={activeIndex == 3}
           amount={singleProfile.venues.length}
     >
-            <section className="px-4 w-full bg-purpleBlack pt-10"     >
-                  {/* My venues component */}
+            <section className="px-4 w-full bg-purpleBlack pt-10 lg:mx-12"     >
+                
               <div className="flex flex-col gap-10">
-              {singleProfile.venues.map((venue) => (
-            <div className="lg:w-1/2 bg-white py-6">
-            <div>
-              <Slider media={venue.media}></Slider>
-            </div>
-            <div className="w-full px-6 md:w-3/4 md:p-0 mx-auto flex flex-col gap-8 my-12">
-              <div className="md:flex flex-row items-center justify-between">
-                <div className="flex flex-col gap-4">
-                  <span className="flex flex-row gap-2">
-                    <img src="/map_pin.svg" />
-                    {venue.location && (
+              {singleProfile.venues.map((venue) => ( <>
+                {fixVenue === '' &&  <div className='lg:w-1/2 bg-white py-6'>
+              <div>
+                <Slider media={venue.media} site='account'></Slider>
+              </div>
+              <div className="w-full px-6 md:w-3/4 md:p-0 mx-auto flex flex-col gap-8 my-12">
+                <div className="md:flex flex-row items-center justify-between">
+                  <div className="flex flex-col gap-4">
+                    <span className="flex flex-row gap-2">
+                      <img src="/map_pin.svg" />
+                      {venue.location && (
+                        <p>
+                          {venue.location.city},{" "}
+                          {venue.location.zip},{" "}
+                          {venue.location.country}
+                        </p>
+                      )}
+                    </span>
+                    <span className="flex flex-row gap-2">
+                      <img src="/guests.svg" />
                       <p>
-                        {venue.location.city},{" "}
-                        {venue.location.zip},{" "}
-                        {venue.location.country}
+                        <span>Max </span>
+                        {venue.maxGuests} guests{" "}
                       </p>
-                    )}
-                  </span>
-                  <span className="flex flex-row gap-2">
-                    <img src="/guests.svg" />
-                    <p>
-                      <span>Max </span>
-                      {venue.maxGuests} guests{" "}
-                    </p>
-                  </span>
-                </div>
-                <div>
+                    </span>
+                  </div>
+                  <div>
                   <span className="flex flex-col items-end  ">
                     <p className="uppercase text-xs text-gray-500 font-montS font-semibold tracking-wide">
                       Price per night
@@ -347,19 +368,25 @@ const Account = () => {
               </div>
               <hr className=" bg-black shadow-none border-none h-0.5 mb-2" />
               <div>
-               <button>Edit</button>
-               <button>Delete</button>
+               <button onClick={() => setfixVenue(venue)}>Edit</button>
+               <button onClick={() => window.confirm('Are you sure you want to delete this venue? It can not be restored') ? dispatch(deleteVenue(venue.id)) + setTimeout(() => dispatch(getSingleProfile(name)), 2000) : null}>Delete</button>
               </div>
+           
             </div>
             
-          </div>
+          </div> }
+          { fixVenue == venue && <EditVenue venue={venue} setfixVenue={setfixVenue}/> }
+</>
           ))}
+         
+          
       
               </div>
             </section>
           </Menu>
+        
         </>
-      )}
+      )} 
     </>
   );
 };

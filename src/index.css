@@ -24,6 +24,38 @@ ul.indicators {
   @apply bg-passionOrange w-screen md:bg-inherit md:w-64 md:underline underline-offset-8 decoration-passionOrange decoration-4 ;
 }
 
+.form-input {
+  @apply  border-b border-black text-sm w-full h-14 outline-none px-4 rounded-md shadow-md flex justify-center
+}
+
+.input-error {
+  @apply border-4 border-pink-500;
+}
+
+.number-input {
+  @apply w-20 text-center text-lg 
+}
+
+.check-input {
+  @apply w-6 h-6 flex
+}
+
+.form-input[label='Zip Code'] {
+  @apply bg-red-200
+}
+
+.area-input {
+  @apply h-40 text-left
+}
+
+.input-ok {
+  @apply border-passionOrange border-4 
+}
+
+.zip-input {
+  @apply place-self-end
+}
+
 
   .react-calendar {
     @apply w-[full] h-[fit] max-w-full bg-purpleBlack leading-[1.125em] m-auto font-montS;

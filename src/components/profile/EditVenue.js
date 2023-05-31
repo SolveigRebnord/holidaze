@@ -1,27 +1,28 @@
 import { useDispatch, useSelector } from "react-redux";
-import { addNewVenue } from "../../store/modules/VenueSlice";
+import { addNewVenue, editVenue } from "../../store/modules/VenueSlice";
 import { useFormik, FormikProvider, useField, Field, Formik, Form, FieldArray } from "formik";
 import * as yup from "yup"; 
-import React, { useEffect } from "react";
+import React from "react";
 import { useState } from "react";
 import { type } from "@testing-library/user-event/dist/type";
 import NewVenueSchema from "../../schemas/NewVenueSchema";
 import { getSingleProfile } from "../../store/modules/ProfilesSlice";
 
 
-const FormInput = ({ label, type, ...props }) => {
+const FormInput = ({ label, ...props }) => {
   const [field, meta] = useField(props);
 
-
+console.log(field.value)
 
   return (
     <>
-    <div className={`flex flex-col  ${field.name == 'zip' ? 'zip-input' : ''}`}>
+    <div className={'flex flex-col'}>
       <label className="text-white font-bold tracking-wide font-montS text-lg bg-opacity-40">{label}</label>
       <input
-      type={type}
+      type={props.type}
         {...field}
         {...props}
+       checked={props.type == 'checkbox' && field.value == true}
         className={`form-input
         ${type=='textarea' ? 'area-input' : ''}
         ${type=='number' ? 'number-input' : ''}
@@ -41,7 +42,7 @@ const FormInput = ({ label, type, ...props }) => {
 
 const FormArray = ({ label, name, type, ...props }) => {
   const [field, meta] = useField(props);
-  console.log(field.value.media)
+  //console.log(field.value.media)
 
   const [imgSrc, setImgSrc] = useState('')
 
@@ -87,7 +88,9 @@ render={arrayHelpers => (
 };
 
 
-const NewVenue = ({...props}) => {
+
+
+const EditVenue = ({...props}) => {
 
     const dispatch = useDispatch();
 
@@ -102,7 +105,7 @@ const NewVenue = ({...props}) => {
 
 const validationSchema = NewVenueSchema
 
-
+console.log(props.venue)
 
       let initMeta = ['wifi' , 'parking', 'breakfast' ,'pets']
 
@@ -112,7 +115,8 @@ const validationSchema = NewVenueSchema
      
       const onSubmit = (values, actions) => {
 
-        console.log(values.name)
+        let venueId = props.venue.id;
+
         let newVenueBody = {
           'name': values.name,
           "description": values.description,
@@ -132,62 +136,57 @@ const validationSchema = NewVenueSchema
             "zip": values.zip ? values.zip : "",
             "country": values.country,
             "continent": values.continent ? values.continent : "",
-            "lat": values.lat ? values.lat : "",
-            "lat": values.lat ? values.lat : "",
+            "lat": values.lat ? values.lat : 0,
+            "lat": values.lat ? values.lat : 0,
           }
         }
         console.log(newVenueBody)
-        dispatch(addNewVenue(newVenueBody))
-  
+        dispatch(editVenue(venueId, newVenueBody))
         .then((data) => {
-          //props.setRefreshState(false)
+          console.log(data);
           dispatch(getSingleProfile(currentUser.name))
-          setTimeout(() => props.goToSection(3), 3000)
-      
-          //setTimeout(() => props.setRefreshState(true), 2000)
-
-
-          console.log(data)
-         
+          setTimeout(() => {
+            props.setfixVenue("")
+          }, 500);
         })
         .catch((error) => {
           console.log(error);
-          
-      
         });
       };
+
 
       const [imgId, setImgId] = useState(0);
 
     return ( 
-    
        
             <Formik initialValues={{
-            "name": "",
-            "description": "",
+            "name": props.venue.name,
+            "description": props.venue.description,
            
-            "media": [],
-            "price": 3,
-            "maxGuests": 3,
-            "rating": 3,
-            "wifi": false,
-            "parking": false,
-            "breakfast": false,
-            "pets": false
+            "media": props.venue.media,
+            "price": props.venue.price,
+            "maxGuests": props.venue.maxGuests,
+            "rating": props.venue.rating,
+            "wifi": props.venue.meta.wifi,
+            "parking":  props.venue.meta.parking,
+            "breakfast":  props.venue.meta.breakfast,
+            "pets":  props.venue.meta.pets
           ,
-            "address": "",
-            "city": "",
-            "zip": "",
-            "country": "",
-            "continent": "",
-            "lat": 1,
-            "lng": 1,
+            "address": props.venue.location.address,
+            "city": props.venue.location.city,
+            "zip": props.venue.location.zip,
+            "country": props.venue.location.country,
+            "continent": props.venue.location.continent,
+            "lat": props.venue.location.lat,
+            "lng": props.venue.location.lng,
             }}
             validationSchema={NewVenueSchema}
             onSubmit={onSubmit} 
+
+  
             >
               {({ isSubmitting }) => (
-        <Form className="p-12 bg-purpleBlack lg:w-1/2 mx-auto">
+        <Form className="p-12 bg-purpleBlack mx-auto w-2/3">
               
                 <div className="flex flex-col gap-4 justify-start">
                   <div className="">
@@ -294,12 +293,12 @@ const validationSchema = NewVenueSchema
                     <button type="submit" className="text-white">Send</button>
           </Form>)}
         </Formik>
-    
+
      );
      
 }
  
-export default NewVenue;
+export default EditVenue;
 
 /*  
 
