@@ -32,13 +32,12 @@ class Slider extends Component {
 
     const slideImages = this.props.media;
     let site = this.props.site
-    
 
     const properties = {
       duration: 5000,
       autoplay: false,
       transitionDuration: 500,
-      arrows: site == 'home' ? false : true || slideImages.length < 1 ? false : true,
+      arrows: site === 'home' || slideImages.length < 1 ? false : true,
       infinite: slideImages.length > 1 ? true : false,
       easing: "ease",
       indicators: true,
@@ -152,6 +151,17 @@ class Slider extends Component {
            ))}
          </Slide>}
          {site == 'venue' && 
+           <Slide ref={this.slideRef} {...properties}>
+           {slideImages.map((each, index) => (
+             <div
+               key={index}
+               className="each-slide h-full w-full object-cover"
+             >
+               <img className="lazy h-full" src={each} alt="sample" />
+             </div>
+           ))}
+         </Slide>}
+         {site === 'account' && 
            <Slide ref={this.slideRef} {...properties}>
            {slideImages.map((each, index) => (
              <div

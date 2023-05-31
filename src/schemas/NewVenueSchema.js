@@ -15,15 +15,15 @@ const NewVenueSchema =
         .number()
         .positive()
         .integer()
-        .moreThan(0)
-        .required('Required'),
+        .moreThan(0),
+      
 
         maxGuests: yup
         .number()
         .positive()
         .integer()
-        .moreThan(0)
-        .required('Required'),
+        .moreThan(0),
+      
 
         rating: yup
         .number()
@@ -34,16 +34,16 @@ const NewVenueSchema =
 
         address: yup
         .string()
-        .required("Required"),
+ ,
 
         city: yup
         .string()
-        .required("Required"),
+,
 
 
         country: yup
         .string()
-        .required("Required"),
+,
 
 
 

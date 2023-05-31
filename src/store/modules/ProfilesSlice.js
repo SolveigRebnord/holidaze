@@ -24,7 +24,7 @@ const ProfilesSlice = createSlice({
 
 export default ProfilesSlice.reducer;
 
-const { SET_PROFILES, SET_SINGLE_PROFILE, EDIT_PROFILE } = ProfilesSlice.actions;
+const { SET_PROFILES, SET_SINGLE_PROFILE, EDIT_PROFILE, } = ProfilesSlice.actions;
 
 const header = authHeader();
 
@@ -63,9 +63,11 @@ export const getSingleProfile = (name) => async (dispatch) => {
     });
 };
 
+
+
+
+
 export const editProfile = (name, img) => async (dispatch) => {
-
-
 
   let body = {'avatar': img}
 

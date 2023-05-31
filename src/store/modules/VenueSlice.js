@@ -17,13 +17,16 @@ const venuesSlice = createSlice({
     },
     NEW_VENUE: (state, action) => {
       state.singleVenue = action.payload;
+    },
+    EDIT_VENUE: (state, action) => {
+      state.singleVenue = action.payload;
     }
   },
 });
 
 export default venuesSlice.reducer;
 
-const { SET_VENUES, SET_SINGLE_VENUE, NEW_VENUE } = venuesSlice.actions;
+const { SET_VENUES, SET_SINGLE_VENUE, NEW_VENUE, EDIT_VENUE } = venuesSlice.actions;
 
 const header = authHeader();
 
@@ -59,6 +62,7 @@ export const getSingleVenue = (id) => async (dispatch) => {
 };
 
 
+
 export const addNewVenue = (venueObject) => async (dispatch) => {
 
   let body = venueObject
@@ -69,8 +73,44 @@ export const addNewVenue = (venueObject) => async (dispatch) => {
     .then(function (response) {
       //hvordan få vekk preventDefault her?
       let data = response.data;
-      //dispatch(EDIT_PROFILE(data));
      
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+ 
+};
+
+
+export const editVenue = (id, venueObject) => async (dispatch) => {
+
+  let body = venueObject
+
+
+ await axios.put(`https://nf-api.onrender.com/api/v1/holidaze/venues/${id}`, body, {
+    headers: header
+})
+    .then(function (response) {
+      //hvordan få vekk preventDefault her?
+      let data = response.data;
+      dispatch(EDIT_VENUE(data));
+     
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+ 
+};
+
+
+export const deleteVenue = (id) => async (dispatch) => {
+
+ await axios.delete(`https://nf-api.onrender.com/api/v1/holidaze/venues/${id}`, {
+    headers: header
+})
+    .then(function (response) {
+      let data = response.data;
+     console.log(data)
     })
     .catch(function (error) {
       console.log(error);
