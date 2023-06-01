@@ -6,7 +6,8 @@ import React, { useEffect } from "react";
 import { useState } from "react";
 import { type } from "@testing-library/user-event/dist/type";
 import NewVenueSchema from "../../schemas/NewVenueSchema";
-import { getSingleProfile } from "../../store/modules/ProfilesSlice";
+import { getSingleProfile, isVenueManager } from "../../store/modules/ProfilesSlice";
+import { current } from "@reduxjs/toolkit";
 
 
 const FormInput = ({ label, type, ...props }) => {
@@ -141,6 +142,7 @@ const validationSchema = NewVenueSchema
   
         .then((data) => {
           //props.setRefreshState(false)
+          dispatch(isVenueManager(currentUser.name, true))
           dispatch(getSingleProfile(currentUser.name))
           setTimeout(() => props.goToSection(3), 3000)
       

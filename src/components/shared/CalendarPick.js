@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import dayjs from "dayjs";
+import React, { useEffect, useRef, useState } from "react";
 import { DateRangePicker } from "react-date-range";
 
 import "react-date-range/dist/styles.css"; // main style file
@@ -6,25 +7,43 @@ import "react-date-range/dist/theme/default.css"; // theme css file
 
 
 
-const CalendarPick = ({ ranges, onChange, formik, ...rest }) => {
+const CalendarPick = ({ ranges, onChange, formik, setShowCalendar, showCalendar, ...rest }) => {
      const [selectedDateRange, setSelectedDateRange] = useState({
           startDate: new Date(),
           endDate: new Date(),
           key: "selection",
      });
+
      const [show, setShow] = useState(false);
 
 
-     function formatDateDisplay(date, defaultText) {
-          if (!date) return defaultText;
-          return (date, "MM/DD/YYYY");
-     }
+ 
 
      const handleSelect = ranges => {
           setSelectedDateRange(ranges.selection);
      };
 
 
+    const [isComponentVisible, setIsComponentVisible] = useState(false);
+    const ref = useRef(null);
+
+    const handleClickOutside = (event) => {
+        if (ref.current && !ref.current.contains(event.target)) {
+          setShowCalendar(false); 
+          setShow(true)
+        }
+    };
+
+    useEffect(() => {
+        document.addEventListener('click', handleClickOutside, true);
+        return () => {
+            document.removeEventListener('click', handleClickOutside, true);
+        };
+    }, []);
+
+    useEffect(() => {
+     setShowCalendar(true)
+ }, []);
 
      const onClickClear = () => {
           setSelectedDateRange({
@@ -32,12 +51,17 @@ const CalendarPick = ({ ranges, onChange, formik, ...rest }) => {
                endDate: new Date(),
                key: "selection"
           });
-          setShow(false);
+     
+       
      };
 
      return (
-          <>
-               <div className="absolute top-16">
+          <> 
+
+<section className='w-full h-full'>
+        
+           {showCalendar && 
+               <div className="absolute left-4 bottom-0 z-20" ref={ref}>
                     <DateRangePicker
                          onChange={handleSelect}
                          showSelectionPreview={true}
@@ -46,32 +70,35 @@ const CalendarPick = ({ ranges, onChange, formik, ...rest }) => {
                          ranges={[selectedDateRange]}
                          direction="vertical"
                     />
-                    <div className="text-right position-relative rdr-buttons-position mt-2 mr-3">
+                    <div className="text-right rdr-buttons-position mt-2 mr-3">
                          <button
                               className="btn btn-transparent text-primary rounded-0 px-4 mr-2"
-                              onClick={() => setShow(true)}
+                              onClick={() => setShow(true) + setShowCalendar(false)}
                          >
                               Done
                          </button>
                          <button
-                              className="btn btn-transparent text-danger rounded-0 px-4"
+                              className="btn btn-transparent text-black rounded-0 px-4"
                               onClick={onClickClear}
                          >
                               Clear
                          </button>
                     </div>
-               </div>
-
-               {show && <div className="h-100 mt-3 alert alert-transparent">
-                    <p className="my-auto d-inline">Start Date :{" "}
-                    {formatDateDisplay(selectedDateRange.startDate)}{" | "}
-                    End Date :{" "}
-                    {formatDateDisplay(selectedDateRange.endDate)}
-                    </p>
-                    <button className="mb-1 btn btn-transparent text-danger" onClick={() => setShow(false)} variant="outline-success"> Close</button>
-                    {selectedDateRange.startDate && <input  value={selectedDateRange.startDate} id='startDate' className="bg-purpleBlack opacity-90 w-full h-14  text-white shadow-md placeholder:italic font-montS rounded-md placeholder:text-white px-4"></input>}
-                    <input value={selectedDateRange.endDate} id='endDate' className="rounded-md bg-purpleBlack opacity-90 w-full h-14  text-white shadow-md placeholder:italic font-montS placeholder:text-white px-4 "></input>
                </div>}
+
+               <div className="w-full">
+
+
+               {show && <div className="">
+                    <p className="my-auto d-inline">Start Date :{" "}
+                    {dayjs(selectedDateRange.startDate).format('YYYY/MM/DD') }{" | "}
+                    End Date :{" "}
+                    {dayjs(selectedDateRange.endDate).format('YYYY/MM/DD') }
+                    </p>
+                    <button className="mb-1 btn btn-transparent text-danger" onClick={() => setShow(false) + onClickClear()} variant="outline-success"> Clear</button>
+                    
+               </div>}</div>
+               </section>
           </>
      );
 };

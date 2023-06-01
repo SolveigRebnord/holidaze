@@ -12,7 +12,6 @@ import { getSingleProfile } from "../../store/modules/ProfilesSlice";
 const FormInput = ({ label, ...props }) => {
   const [field, meta] = useField(props);
 
-console.log(field.value)
 
   return (
     <>
@@ -86,8 +85,6 @@ render={arrayHelpers => (
     </>
   );
 };
-
-
 
 
 const EditVenue = ({...props}) => {
