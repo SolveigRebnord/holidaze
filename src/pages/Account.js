@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, Navigate } from "react-router-dom";
-import { editProfile, getSingleProfile } from "../store/modules/ProfilesSlice";
-import { getFilteredBookings } from "../store/modules/BookingSlice";
+import { editProfile, getSingleProfile, isVenueManager } from "../store/modules/ProfilesSlice";
+import { deleteBooking, getFilteredBookings } from "../store/modules/BookingSlice";
 import { useState } from "react";
 import React from "react";
 import Menu from "../components/Menu";
@@ -16,19 +16,22 @@ import NewVenue from "../components/profile/NewVenue";
 import EditVenue from "../components/profile/EditVenue";
 import { isAction } from "@reduxjs/toolkit";
 import { addNewVenue, deleteVenue, editVenue } from "../store/modules/VenueSlice"
+import EditBooking from "../components/EditBooking";
 
 
 const Account = () => {
+  
   const dispatch = useDispatch();
 
   const { user: currentUser } = useSelector((state) => state.auth);
   const { singleProfile } = useSelector((state) => state.profiles);
-  const { userVenues } = useSelector((state) => state.profiles);
+
 
 
   const dayjs = require('dayjs')
   dayjs().format('DD/MM/YYYY')
   
+
 
   if (!currentUser) {
     window.location.replace("/login");
@@ -40,6 +43,8 @@ const Account = () => {
   let name = currentUser.name;
 
 
+
+
   const myRef = useRef(null)
 
   const ref2 = useRef(null)
@@ -48,8 +53,8 @@ const Account = () => {
 
   const [activeIndex, setActiveIndex] = useState(0);
   const [active, setActive] = useState(null);
-  const [refreshState, setRefreshState] = useState(true);
   const [fixVenue, setfixVenue] = useState("");
+  const [editBooking, setEditBooking] = useState("");
 
 
   let menuItems = [ {title: 'Add new venue'}, {title: 'Upcoming Bookings'}, {title: 'Your venues'}];
@@ -57,7 +62,7 @@ const Account = () => {
 
 
   function handleClick(id) {
-    console.log(id)
+
 
     let number = id.target.id;
     if (number === activeIndex) {
@@ -71,7 +76,7 @@ const Account = () => {
     }
   }
 
-  function goToSection (id) {
+   function goToSection (id) {
     let number = id
     setActiveIndex(number);
     setActive(number);
@@ -89,6 +94,7 @@ const Account = () => {
       dispatch(getSingleProfile(name));
     }
   }, [dispatch, name],);
+
 
 
   const timeDiff = (startDate, endDate) => {
@@ -193,7 +199,7 @@ const Account = () => {
           isActive={activeIndex == 1}
           amount={null}
           >
-             <NewVenue goToSection={goToSection} setRefreshState={setRefreshState} />
+             <NewVenue goToSection={goToSection}  />
           </Menu>
 
           <Menu 
@@ -202,9 +208,9 @@ const Account = () => {
           amount={ singleProfile.bookings.length}
           >
             <section className="w-full px-4 pt-10 md:px-8">
-              {/* My bookings component */}
-              <div>
-                {singleProfile.bookings.map((booking) => (
+          
+                {singleProfile.bookings.map((booking) => ( <>
+                    {editBooking === '' &&  <div className='lg:w-1/2 bg-white py-6'>
                   <div
                     className="flex flex-col gap-2 p-1 border border-black w-full md:flex-row-reverse md:justify-between lg:w-2/3 mx-auto"
                     key={booking.id}
@@ -261,15 +267,19 @@ const Account = () => {
                             </span>
                             </div>
                             <div>
-                              <button>Edit</button>
-                              <button>Cancel</button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                  ))}
-
+               <button onClick={() => setEditBooking(booking)}>Edit</button>
+               <button onClick={() => window.confirm('Are you sure you want to delete this booking? It can not be restored') ? dispatch(deleteBooking(booking.id)) + setTimeout(() => dispatch(getSingleProfile(name)), 2000) : null}>Delete</button>
               </div>
+           </div>
+            </div>
+            </div>
+                    </div>  }
+          { editBooking == booking && <EditBooking booking={booking} setEditBooking={setEditBooking}/> }
+                        
+                    
+                      </>    
+                       ))}
+                     
             </section>
           </Menu>
 

@@ -8,6 +8,7 @@ const ProfilesSlice = createSlice({
   initialState: {
     profiles: [],
     singleProfile: null,
+    venueManager: false
   },
   reducers: {
     SET_PROFILES: (state, action) => {
@@ -19,12 +20,16 @@ const ProfilesSlice = createSlice({
     EDIT_PROFILE: (state, action) => {
       state.singleProfile = action.payload;
     },
+    IS_VENUEMANAGER: (state, action) => {
+      state.venueManager = action.payload;
+    },
+
   },
 });
 
 export default ProfilesSlice.reducer;
 
-const { SET_PROFILES, SET_SINGLE_PROFILE, EDIT_PROFILE, } = ProfilesSlice.actions;
+const { SET_PROFILES, SET_SINGLE_PROFILE, EDIT_PROFILE, IS_VENUEMANAGER } = ProfilesSlice.actions;
 
 const header = authHeader();
 
@@ -57,14 +62,12 @@ export const getSingleProfile = (name) => async (dispatch) => {
       let data = response.data;
       console.log(data);
       dispatch(SET_SINGLE_PROFILE(data));
+      data.venues.length >= 1 ? dispatch(isVenueManager(data.name, true)) : dispatch(isVenueManager(data.name, false))
     })
     .catch(function (error) {
       console.log(error);
     });
 };
-
-
-
 
 
 export const editProfile = (name, img) => async (dispatch) => {
@@ -78,6 +81,26 @@ export const editProfile = (name, img) => async (dispatch) => {
       //hvordan få vekk preventDefault her?
       let data = response.data;
       dispatch(EDIT_PROFILE(data));
+     
+    })
+    .catch(function (error) {
+      dispatch(setError(true,error.message))
+      console.log(error);
+    });
+ 
+};
+
+export const isVenueManager = (name, bool) => async (dispatch) => {
+
+  let body = {'venueManager': bool}
+
+ await axios.put(`https://nf-api.onrender.com/api/v1/holidaze/profiles/${name}`, body, {
+    headers: header
+})
+    .then(function (response) {
+      //hvordan få vekk preventDefault her?
+      let data = response.data;
+      dispatch(IS_VENUEMANAGER(data));
      
     })
     .catch(function (error) {

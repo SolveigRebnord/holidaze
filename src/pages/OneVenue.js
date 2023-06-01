@@ -6,6 +6,7 @@ import { Slide } from "react-slideshow-image";
 import "react-slideshow-image/dist/styles.css";
 import Slider from '../components/shared/Slider'
 import Hero from "../components/shared/Hero";
+import BookingForm from "../components/BookingForm";
 
 const OneVenue = () => {
   const dispatch = useDispatch();
@@ -133,48 +134,8 @@ const OneVenue = () => {
                 </div>
               </div>
                 {/* Search ish component */}
-              <form className=" p-2 font-montS text-sm text-black flex flex-col gap-6">
-                <div className="flex flex-row justify-between items-center">
-                  <input
-                    className="w-1/2 bg-white h-12 px-2"
-                    placeholder="24.april-25.april"
-                  ></input>
-                  <input
-                    className="w-1/2 text-right bg-white h-12 px-2"
-                    placeholder="1 night"
-                  ></input>
-                </div>
-                <input
-                  className="p-2 w-full text-right h-12"
-                  placeholder="2 guests"
-                ></input>
-              </form>
-              <div>
-                <span className="flex flex-col items-end text-white">
-                  <p className="uppercase text-passionOrange text-xs font-montS font-semibold tracking-wide">
-                    Price per night
-                  </p>
-                  <p className="font-montS font-semibold tracking-wide text-normal ">
-                    {singleVenue.price} NOK
-                  </p>
-                </span>
-                <hr className=" bg-white shadow-none border-none h-0.5 my-6" />
-                <span className="flex flex-col items-end text-white">
-                  <p className=" text-xs font-montS font-semibold tracking-wide">
-                    incl. taxes
-                  </p>
-                  <p className="uppercase text-passionOrange text-sm font-montS font-semibold tracking-wide">
-                    Total price
-                  </p>
-                  <p className="font-passionOne font-semibold tracking-wider text-3xl ">
-                    {singleVenue.price} NOK
-                  </p>
-                </span>
-                <hr className=" bg-white shadow-none border-none h-0.5 my-6" />
-                <button className="ml-auto block bg-passionOrange uppercase text-purpleBlack px-12 w-fit font-semibold h-12 text-sm shadow-md drop-shadow-md">
-                  Book
-                </button>
-              </div>
+            <BookingForm venue={singleVenue} />
+             
             </section>
             {/* If true, Display booking details overlay component. Return og confirm knapper. Confirm går til profile og viser din nylige booking. */}
           </section>
