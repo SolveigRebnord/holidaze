@@ -1,5 +1,6 @@
 import dayjs from "dayjs";
 import React, { useEffect, useRef, useState } from "react";
+import { tileProps } from "react-calendar/dist/cjs/shared/propTypes";
 import { DateRangePicker } from "react-date-range";
 
 import "react-date-range/dist/styles.css"; // main style file
@@ -7,7 +8,7 @@ import "react-date-range/dist/theme/default.css"; // theme css file
 
 
 
-const CalendarPick = ({ ranges, onChange, formik, setShowCalendar, showCalendar, ...rest }) => {
+const CalendarPick = ({ ranges, onChange, formik, setShowCalendar, showCalendar, ...props }) => {
      const [selectedDateRange, setSelectedDateRange] = useState({
           startDate: new Date(),
           endDate: new Date(),
@@ -21,6 +22,7 @@ const CalendarPick = ({ ranges, onChange, formik, setShowCalendar, showCalendar,
 
      const handleSelect = ranges => {
           setSelectedDateRange(ranges.selection);
+          props.setSelectedDateRange(ranges.selection)
      };
 
 
@@ -41,9 +43,7 @@ const CalendarPick = ({ ranges, onChange, formik, setShowCalendar, showCalendar,
         };
     }, []);
 
-    useEffect(() => {
-     setShowCalendar(true)
- }, []);
+ 
 
      const onClickClear = () => {
           setSelectedDateRange({
@@ -58,10 +58,10 @@ const CalendarPick = ({ ranges, onChange, formik, setShowCalendar, showCalendar,
      return (
           <> 
 
-<section className='w-full h-full'>
+<section className=' h-fit relative'>
         
            {showCalendar && 
-               <div className="absolute left-4 bottom-0 z-20" ref={ref}>
+               <div className="absolute left-0 top-0 z-30 h-fit " ref={ref}>
                     <DateRangePicker
                          onChange={handleSelect}
                          showSelectionPreview={true}
@@ -70,7 +70,7 @@ const CalendarPick = ({ ranges, onChange, formik, setShowCalendar, showCalendar,
                          ranges={[selectedDateRange]}
                          direction="vertical"
                     />
-                    <div className="text-right rdr-buttons-position mt-2 mr-3">
+                    <div className="">
                          <button
                               className="btn btn-transparent text-primary rounded-0 px-4 mr-2"
                               onClick={() => setShow(true) + setShowCalendar(false)}
@@ -86,18 +86,27 @@ const CalendarPick = ({ ranges, onChange, formik, setShowCalendar, showCalendar,
                     </div>
                </div>}
 
-               <div className="w-full">
+               <div className="">
 
-
-               {show && <div className="">
-                    <p className="my-auto d-inline">Start Date :{" "}
-                    {dayjs(selectedDateRange.startDate).format('YYYY/MM/DD') }{" | "}
-                    End Date :{" "}
-                    {dayjs(selectedDateRange.endDate).format('YYYY/MM/DD') }
-                    </p>
-                    <button className="mb-1 btn btn-transparent text-danger" onClick={() => setShow(false) + onClickClear()} variant="outline-success"> Clear</button>
+               {props.show && 
+               <div className="w-full flex flex-row justify-evenly items-center">
+                    <input name="dateFrom"  onClick={() => setShowCalendar(true)} value={dayjs(selectedDateRange.startDate).format('YYYY/MM/DD') }  className="w-24 text-center">
+                     </input>
+                    <input name="dateTo" onClick={() => setShowCalendar(true)} value={dayjs(selectedDateRange.endDate).format('YYYY/MM/DD') } className="w-24 text-center">
                     
-               </div>}</div>
+                    
+                    </input>
+                    
+               </div>}
+               <div className="w-full text-right">
+               <button   onClick={() => setShow(false) + onClickClear()} className="bg-white px-4 py-1 uppercase font-bold text-xs h-fit w-fit my-2">
+                Clear
+              </button>
+               </div>
+              
+               
+
+               </div>
                </section>
           </>
      );

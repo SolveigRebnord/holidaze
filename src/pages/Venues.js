@@ -1,21 +1,74 @@
 import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, createRoutesFromChildren } from "react-router-dom";
-import { getVenues } from "../store/modules/VenueSlice";
+import { getFilteredVenues, getVenues, searchVenues } from "../store/modules/VenueSlice";
 import { useLocation } from "react-router-dom";
-import { useFormik, FormikProvider, useField } from "formik";
+import { useFormik, FormikProvider, useField, Form, Formik } from "formik";
 import * as yup from "yup"; 
 import {useState, React} from 'react';
 import Hero from "../components/shared/Hero";
 import Filter from "../components/venues/Filter";
+import dayjs from "dayjs";
+import CalendarPick from "../components/shared/CalendarPick";
 
 const Venues = () => {
   const dispatch = useDispatch();
   const { venues } = useSelector((state) => state.venues);
+  const { filteredVenues } = useSelector((state) => state.venues);
+  const [activeFilter, setActiveFilter] = useState(false);
+
+
+  const FormInput = ({ label, value, type, ...props }) => {
+    const [field, meta] = useField(props);
+  
+    return (
+      <>
+        <div className={"flex flex-col"}>
+          <label className=" font-bold tracking-wide font-montS text-lg bg-opacity-40">
+            {label}
+          </label>
+          <input
+            type={props.type}
+            {...field}
+            {...props}
+            value={field.value}
+            enableReinitialize={true}
+
+            className={` bg-white h-12 px-2
+          ${type == "date" ? "area-input" : ""}
+          ${type == "number" ? "ring-1 ring-black rounded-md w-14 text-center text-lg" : ""}
+          ${meta.touched && meta.error ? "input-error" : ""}
+          ${meta.touched && !meta.error && "input-ok"}`}
+          />
+        </div>
+        <div className="h-8">
+          {meta.touched && meta.error && (
+            <p className=" text-right ">{meta.error}</p>
+          )}
+        </div>
+      </>
+    );
+  };
+  
 
   useEffect(() => {
     dispatch(getVenues());
   }, [dispatch]);
+
+  let activeVenues = [];
+
+  if (activeFilter) {
+    activeVenues = filteredVenues
+  }  else {
+    activeVenues = venues
+  } 
+  const [selectedDateRange, setSelectedDateRange] = useState({
+    startDate: new Date(),
+    endDate: new Date(),
+    key: "selection",
+});
+
+
 
   const formRef = useRef()
   const { user: currentUser } = useSelector((state) => state.auth);
@@ -24,79 +77,106 @@ const Venues = () => {
   const [maxGuestsFilter, setMaxGuestsFilter] = useState("");
   const [  priceFilter, setPriceFilter] = useState("");
 
+  const [showCalendar, setShowCalendar] = useState(false)
 
   
-  
-  {/* If search data from Home */}
+
 let homeData = location.state
 let initialVal;
 let initPlace
 let initStartDate;
 let initEndDate;
+let initGuests;
 
 if (homeData) {
 
-  initStartDate = homeData.id.startDate;
-  initPlace = homeData.id.place;
-  initEndDate = homeData.id.endDate;
+  initStartDate = homeData.search.dateFrom;
+  initPlace = homeData.search.place;
+  initEndDate = homeData.search.dateTo;
+  initGuests = homeData.search.guests;
+
 
   initialVal = {
   initialValues: {
-    place: initPlace,
-    startDate:initStartDate,
-    endDate: initEndDate
+    startDate: selectedDateRange.startDate,
+    endDate: selectedDateRange. endDate,
+    guests: 2
+
+    
   }} //Få til at den submitter her?
+
 }
 else {
+
   initialVal = {
     initialValues: {
       place: "",
       startDate: "",
       endDate: ""
+      
     }}
-}
-  {/* ----------- */}
+  }
 
 
-    const validationSchema = yup.object({
-        place: yup
-          .string()
-          .required('oh no')
-          .min(3)
-          ,
-          startDate: yup
-          .string(),
-          endDate: yup
-          .string(),
-      });
 
-    const [isForm, setForm] = useState(true);
-    const [isConfirmation, setConfirmation] = useState(false);
+
+
+
+
+const [show, setShow] = useState(true);
+const [isOk, setIsOk] = useState(false);
+
+const handleSelect = (ranges) => {
+  setSelectedDateRange(ranges.selection);
+};
+
+const ref = useRef(null);
+
+const handleClickOutside = (event) => {
+  if (ref.current && !ref.current.contains(event.target)) {
+    setShowCalendar(false);
+    setShow(true);
+  }
+};
+
+useEffect(() => {
+  document.addEventListener("click", handleClickOutside, true);
+  return () => {
+    document.removeEventListener("click", handleClickOutside, true);
+  };
+}, []);
+
+const onClickClear = () => {
+  setSelectedDateRange({
+    startDate: new Date(),
+    endDate: new Date(),
+    key: "selection",
+  });
+};
+    
+
   
-    const formik = useFormik({
-      initialValues: {
-        place: "",
-        startDate: "",
-        endDate: ""
-      },
-        validationSchema,
-        onSubmit: (values, actions) => {
-          console.log(values);
+
+       
+      const onSubmit = (values) => {
+          let searchBody = {
+            startDate: selectedDateRange.startDate,
+            endDate: selectedDateRange. endDate,
+            guests: values.guests
+          }
+          dispatch(searchVenues(searchBody))
+          setActiveFilter(true)
           //setForm(false)
           //actions.resetForm()
          
-        },
+        };
         
         
-      });
-
-      (formik.errors && console.log(formik.errors))
-
+      
 
 
   return (
     <>
-    {/* Hero */}
     <Hero img={"/mountain_resort.jpg"} text={'Venues'}></Hero>
       <section className=" relative pt-4">
         {!currentUser && (
@@ -104,48 +184,50 @@ else {
             Log in to find it all
           </span>
         )}
-        <div className="flex flex-row justify-between items-center mb-12"></div>
-         {/* Search component */}
         <section className="mx-6 md:w-2/3 md:mx-auto lg:w-1/2  bg-purpleBlack p-4 flex flex-col gap-4">
           <div>
             <div className="flex flex-row justify-between items-center uppercase">
-              <h2 className="text-white font-semibold tracking-wide font-passionOne ">
-                Search Results
+              <h2 className="text-white font-semibold tracking-wider font-passionOne text-lg">
+                Search
               </h2>
-              <button className="bg-white px-4 py-1 uppercase font-bold text-sm h-fit w-fit">
-                Edit
-              </button>
+             
             </div>
           </div>
-          {isForm && (
-        <FormikProvider 
-        value={formik}>
-          <form        
-          onSubmit={formik.handleSubmit}
-            onChange={formik.handleChange} 
-            className="bg-white p-2 font-montS text-sm text-black">
-            <div className="flex flex-row justify-between items-center p-2">
-              <input className="w-1/2 " id="startDate" value={initStartDate} placeholder="24.april-25.april"></input>
-              <input className="w-1/2 " id="endDate" value={initEndDate} placeholder="24.april-25.april"></input>
-
-              <input
-                className="w-1/2 text-right "
-                placeholder="2 guests"
-              ></input>
-            </div>
-            <hr className="bg-black my-2"></hr>
-            <input id="place" value={initPlace} 
-            onBlur={formik.handleBlur}
-           
-              className="p-2 w-full text-right"
-            ></input>
-             {formik.errors.place && formik.touched.place && <p>{formik.errors.place}</p> }
+     
+        <Formik initialValues={
+          initialVal
+        }
+     
+      onSubmit={onSubmit} 
+      onChange={handleSelect}>
+        {() => (
+         <Form className="bg-white p-2 font-montS text-sm text-black">
+          
+               <div className=" text-center my-4">
+                  <button onClick={() => setShowCalendar(!showCalendar)} ><img src="/calendar.svg" className="w-8 ring-2 ring-offset-4 ring-passionOrange rounded-sm shadow-md" /></button>
+                </div>
+            <div className="w-full p-2">
+              <CalendarPick setShowCalendar={setShowCalendar} show={show} showCalendar={showCalendar} setSelectedDateRange={setSelectedDateRange} />
+              <hr className="bg-black my-4"></hr>
+              <div className="flex flex-row gap-2 items-center justify-center">
+              <span>Minimum </span>
+                <FormInput
+                className="w-full text-right "
+                name="guests"
+                id="guests"
+                type="number"
              
-            <button disabled={formik.isSubmitting} className={formik.isSubmitting && 'text-red-300'} type="submit">Search</button>
-           </form>
-        </FormikProvider>)}
+                ></FormInput>
+                <span>Guests</span>
+              </div>
+            </div>
+            <button className="orangeBtn my-4"  type="submit">Search</button>
+           </Form>)}
+          </Formik>
         </section>
+      </section>
     
+
         {/* Filter/Sort component */}
         <div className="flexR my-8 mx-6 md:w-2/3 lg:w-1/2 md:mx-auto">
           <Filter >
@@ -170,7 +252,7 @@ else {
 
         {/* Venues component */}
         <div className="flex flex-wrap justify-between gap-12 lg:gap-14 mx-6 md:mx-16 lg:mx-52">
-          {venues.map((venue) => (
+          {activeVenues.map((venue) => (
             <div
               className="flex flex-col gap-2 p-1 border border-black w-full md:flex-row-reverse md:justify-between lg:w-2/3 mx-auto"
               key={venue.id}
@@ -253,9 +335,8 @@ else {
             </div>
           ))}
         </div>
-      </section>
     </>
-  );
+  )
 };
 
 export default Venues;

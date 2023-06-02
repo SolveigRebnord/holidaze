@@ -90,49 +90,43 @@ export const getFilteredBookings = (filter) => (dispatch) => {
 };
 
 export const makeBooking = (body) => async (dispatch) => {
-
-
- await axios.post("https://nf-api.onrender.com/api/v1/holidaze/bookings", body, {
-    headers: header
-})
+  await axios
+    .post("https://nf-api.onrender.com/api/v1/holidaze/bookings", body, {
+      headers: header,
+    })
     .then(function (response) {
       let data = response.data;
-      console.log(data)
-     
+      console.log(data);
     })
     .catch(function (error) {
       console.log(error);
     });
- 
 };
 
 export const deleteBooking = (id) => async (dispatch) => {
-
-  await axios.delete(`https://nf-api.onrender.com/api/v1/holidaze/bookings/${id}`, {
-    headers: header
-})
+  await axios
+    .delete(`https://nf-api.onrender.com/api/v1/holidaze/bookings/${id}`, {
+      headers: header,
+    })
     .then(function (response) {
       let data = response.data;
-     console.log(data)
+      console.log(data);
     })
     .catch(function (error) {
       console.log(error);
     });
- 
 };
 
 export const editBooking = (body, id) => async (dispatch) => {
-
-  await axios.put(`https://nf-api.onrender.com/api/v1/holidaze/bookings/${id}`, body, {
-    headers: header
-})
+  await axios
+    .put(`https://nf-api.onrender.com/api/v1/holidaze/bookings/${id}`, body, {
+      headers: header,
+    })
     .then(function (response) {
       let data = response.data;
- console.log(data)
-     
+      console.log(data);
     })
     .catch(function (error) {
       console.log(error);
     });
- 
 };

@@ -13,7 +13,7 @@ const reducer = combineReducers({
   auth: AuthSlice,
   profiles: ProfilesSlice,
   menu: MenuSlice,
-  error: ErrorSlice
+  error: ErrorSlice,
 });
 const index = configureStore({
   reducer,

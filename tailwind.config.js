@@ -16,7 +16,7 @@ module.exports = {
         lightBeige: "#FDF3E8",
       },
       content: {
-        'img': 'url("../public/profile_icon.svg")',
+        img: 'url("../public/profile_icon.svg")',
       },
     },
     plugins: [],

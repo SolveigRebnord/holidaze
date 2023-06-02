@@ -1,5 +1,3 @@
-
-
 .react-slideshow-container + ul.indicators {
   gap: 4px;
 }
@@ -127,11 +125,8 @@ h3 {
 }
 
 .active {
-
-text-decoration: underline;
+  text-decoration: underline;
 }
-
-
 
 .react-calendar {
   width: 400px;
@@ -141,7 +136,6 @@ text-decoration: underline;
   background-color: theme("colors.purpleBlack");
   font-family: theme("fontFamily.montS");
   line-height: 1.125em;
-
 }
 
 .react-calendar--doubleView {
@@ -217,7 +211,6 @@ text-decoration: underline;
   font-weight: bold;
 }
 
-
 .react-calendar__month-view__days__day--weekend {
   color: #d10000;
 }
@@ -285,7 +278,6 @@ text-decoration: underline;
   background-color: #e6e6e6;
 }
 
-div.rdrDefinedRangesWrapper{
+div.rdrDefinedRangesWrapper {
   display: none;
 }
-

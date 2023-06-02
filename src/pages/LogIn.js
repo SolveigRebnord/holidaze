@@ -19,7 +19,6 @@ const Login = () => {
 
   const [showRegister, setRegister] = useState(false);
 
-
   const dispatch = useDispatch();
 
   const initialValues = {
@@ -53,21 +52,27 @@ const Login = () => {
     return <Navigate to="/" />;
   }
 
-   
-
   return (
     <div className="pt-32 login-form bg-purpleBlack">
       <div className="">
-        <h1 className="text-white font-passionOne text-2xl text-center tracking-wider uppercase">Sign In</h1>
+        <h1 className="text-white font-passionOne text-2xl text-center tracking-wider uppercase">
+          Sign In
+        </h1>
         <Formik
           initialValues={initialValues}
           validationSchema={validationSchema}
           onSubmit={handleLogin}
         >
-          <Form className="mx-6 font-montS flex flex-col gap-8 my-12"> 
+          <Form className="mx-6 font-montS flex flex-col gap-8 my-12">
             <div className="form-group flex-col flex gap-2">
-              <label htmlFor="email" className="text-white">Email</label>
-              <Field name="email" type="text" className="form-control h-14 w-full rounded-md px-4" />
+              <label htmlFor="email" className="text-white">
+                Email
+              </label>
+              <Field
+                name="email"
+                type="text"
+                className="form-control h-14 w-full rounded-md px-4"
+              />
               <ErrorMessage
                 name="email"
                 component="div"
@@ -76,8 +81,14 @@ const Login = () => {
             </div>
 
             <div className="form-group flex-col flex gap-2">
-              <label htmlFor="password" className="text-white">Password</label>
-              <Field name="password" type="password" className="form-control  h-14 w-full rounded-md" />
+              <label htmlFor="password" className="text-white">
+                Password
+              </label>
+              <Field
+                name="password"
+                type="password"
+                className="form-control  h-14 w-full rounded-md"
+              />
               <ErrorMessage
                 name="password"
                 component="div"
@@ -86,11 +97,7 @@ const Login = () => {
             </div>
 
             <div className="form-group">
-              <button
-                type="submit"
-                className="text-white"
-                disabled={loading}
-              >
+              <button type="submit" className="text-white" disabled={loading}>
                 {loading && (
                   <span className="spinner-border spinner-border-sm"></span>
                 )}
@@ -107,14 +114,18 @@ const Login = () => {
 
         <div className="text-white">
           <h2 className="text-center">
-            Dont have an account? 
-            <button onClick={() => setRegister(true)} className="block mx-auto ">Register now</button>
-            to book your next holiday destination!</h2>
+            Dont have an account?
+            <button
+              onClick={() => setRegister(true)}
+              className="block mx-auto "
+            >
+              Register now
+            </button>
+            to book your next holiday destination!
+          </h2>
         </div>
 
-        {showRegister && 
-       <SignUp/>
-        }
+        {showRegister && <SignUp />}
       </div>
     </div>
   );

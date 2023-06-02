@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getSingleVenue } from "../store/modules/VenueSlice";
 import { Slide } from "react-slideshow-image";
 import "react-slideshow-image/dist/styles.css";
-import Slider from '../components/shared/Slider'
+import Slider from "../components/shared/Slider";
 import Hero from "../components/shared/Hero";
 import BookingForm from "../components/BookingForm";
 
@@ -25,10 +25,10 @@ const OneVenue = () => {
         <section className="">
           <Hero img={"/plants.jpg"} text={singleVenue.name}></Hero>
           <section className="flex flex-col lg:flex-row justify-center lg:gap-20 lg:p-20 lg:px-32">
-               {/* One Venue component */}
+            {/* One Venue component */}
             <div className="lg:w-1/2">
               <div>
-                <Slider media={singleVenue.media} site={'venue'}></Slider>
+                <Slider media={singleVenue.media} site={"venue"}></Slider>
               </div>
               <div className="w-full px-6 md:w-3/4 md:p-0 mx-auto flex flex-col gap-8 my-12">
                 <div className="md:flex flex-row items-center justify-between">
@@ -124,7 +124,7 @@ const OneVenue = () => {
               </div>
             </div>
 
-              {/* Booking component */}
+            {/* Booking component */}
             <section className=" md:px-32 lg:w-1/3 h-fit py-12  bg-purpleBlack p-6 md:py-20 lg:py-12 lg:px-6 flex flex-col gap-4">
               <div>
                 <div className="uppercase">
@@ -133,9 +133,8 @@ const OneVenue = () => {
                   </h2>
                 </div>
               </div>
-                {/* Search ish component */}
-            <BookingForm venue={singleVenue} />
-             
+              {/* Search ish component */}
+              <BookingForm venue={singleVenue} />
             </section>
             {/* If true, Display booking details overlay component. Return og confirm knapper. Confirm går til profile og viser din nylige booking. */}
           </section>
