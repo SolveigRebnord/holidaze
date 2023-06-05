@@ -30,17 +30,17 @@ class Slider extends Component {
       duration: 5000,
       autoplay: false,
       transitionDuration: 500,
-      arrows: site === "home" || slideImages.length < 1 ? false : true,
+      arrows: site === "home" || slideImages.length <= 1 ? false : true,
       infinite: slideImages.length > 1 ? true : false,
       easing: "ease",
       indicators: true,
       nextArrow: (
-        <span className="w-fit bg-purpleBlack p-2 h-fit mr-4">
+        <span className="w-8 bg-purpleBlack  h-8 flex justify-center rounded-full items-center p-1 mr-8">
           <img src="/arrow_white.svg" />
         </span>
       ),
       prevArrow: (
-        <span className="w-fit bg-purpleBlack p-2 h-fit ml-4 rotate-180">
+        <span className="w-8 bg-purpleBlack h-8 flex justify-center rounded-full items-center p-1 ml-8 rotate-180">
           <img src="/arrow_white.svg" />
         </span>
       ),
@@ -143,9 +143,9 @@ class Slider extends Component {
               {slideImages.map((each, index) => (
                 <div
                   key={index}
-                  className="each-slide h-full w-full object-cover"
+                  className=" w-full h-full p-4 "
                 >
-                  <img className="lazy h-full" src={each} alt="sample" />
+                  <img className="w-full h-96 object-cover" src={each} alt="sample" />
                 </div>
               ))}
             </Slide>

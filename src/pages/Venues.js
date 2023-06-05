@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, createRoutesFromChildren } from "react-router-dom";
+import { Link, createRoutesFromChildren, useNavigate } from "react-router-dom";
 import { getFilteredVenues, getVenues, searchVenues } from "../store/modules/VenueSlice";
 import { useLocation } from "react-router-dom";
 import { useFormik, FormikProvider, useField, Form, Formik } from "formik";
@@ -17,6 +17,7 @@ const Venues = () => {
   const { filteredVenues } = useSelector((state) => state.venues);
   const [activeFilter, setActiveFilter] = useState(false);
 
+  const navigate = useNavigate()
 
   const FormInput = ({ label, value, type, ...props }) => {
     const [field, meta] = useField(props);
@@ -31,8 +32,8 @@ const Venues = () => {
             type={props.type}
             {...field}
             {...props}
-            value={field.value}
-            enableReinitialize={true}
+    
+   
 
             className={` bg-white h-12 px-2
           ${type == "date" ? "area-input" : ""}
@@ -79,47 +80,47 @@ const Venues = () => {
 
   const [showCalendar, setShowCalendar] = useState(false)
 
-  
+  let homeData;
+if (location.state) {
+  homeData = location.state;
+} 
 
-let homeData = location.state
 let initialVal;
-let initPlace
 let initStartDate;
 let initEndDate;
 let initGuests;
 
+
+
+
 if (homeData) {
 
   initStartDate = homeData.search.dateFrom;
-  initPlace = homeData.search.place;
-  initEndDate = homeData.search.dateTo;
-  initGuests = homeData.search.guests;
+initEndDate = homeData.search.dateTo;
+initGuests = homeData.search.guests;
 
-
+ 
   initialVal = {
-  initialValues: {
+ 
     startDate: selectedDateRange.startDate,
-    endDate: selectedDateRange. endDate,
-    guests: 2
+    endDate: selectedDateRange.endDate,
+    guests: initGuests
 
     
-  }} //Få til at den submitter her?
+  } //Få til at den submitter her?
 
 }
 else {
 
   initialVal = {
-    initialValues: {
-      place: "",
-      startDate: "",
-      endDate: ""
+    
+      guests: 2,
+      startDate: selectedDateRange.startDate,
+      endDate: selectedDateRange.endDate
+
       
-    }}
+    }
   }
-
-
-
-
 
 
 
@@ -155,7 +156,7 @@ const onClickClear = () => {
 };
     
 
-  
+
 
        
       const onSubmit = (values) => {
@@ -178,11 +179,13 @@ const onClickClear = () => {
   return (
     <>
     <Hero img={"/mountain_resort.jpg"} text={'Venues'}></Hero>
-      <section className=" relative pt-4">
+      <section className=" relative">
         {!currentUser && (
-          <span className="absolute w-full bg-red-300 top-0">
-            Log in to find it all
-          </span>
+          <Link to={'/login'} >
+          <div className="w-full bg-passionOrange shadow-md flex justify-center text-xs items-center h-10 mb-8 font-semibold tracking-wide uppercase ">
+            - Log in to find and book your perfect venue -
+          </div>
+          </Link>
         )}
         <section className="mx-6 md:w-2/3 md:mx-auto lg:w-1/2  bg-purpleBlack p-4 flex flex-col gap-4">
           <div>
@@ -210,7 +213,7 @@ const onClickClear = () => {
               <CalendarPick setShowCalendar={setShowCalendar} show={show} showCalendar={showCalendar} setSelectedDateRange={setSelectedDateRange} />
               <hr className="bg-black my-4"></hr>
               <div className="flex flex-row gap-2 items-center justify-center">
-              <span>Minimum </span>
+              <span>Minimum</span>
                 <FormInput
                 className="w-full text-right "
                 name="guests"
@@ -272,7 +275,7 @@ const onClickClear = () => {
                 <div className="mt-2 flex flex-col items-start gap-2">
                   <h3 className="font-passionOne uppercase text-2xl tracking-wide">
                     {" "}
-                    <Link to={`/venues/${venue.id}`}>{venue.name}</Link>
+                    {venue.name}
                   </h3>
                   <div className="flexR justify-normal gap-2 font-semibold">
                     <img src="/map_pin.svg" className="w-6" />
@@ -319,9 +322,11 @@ const onClickClear = () => {
                 </div>
                 <hr className="hidden md:block bg-black shadow-none border-none h-0.5 mb-2" />
                 <div className="flex flex-row justify-between items-center md:flex-col-reverse md:gap-4 md:items-start">
-                  <button className="bg-lightBeige text-purpleBlack px-4 w-fit font-semibold h-14 text-sm shadow-md drop-shadow-md md:px-6 md:h-12">
+              
+                  <button onClick={() => navigate(`/venues/${venue.id}`)} className="bg-purpleBlack text-white px-4 w-fit font-semibold h-14 text-sm shadow-md drop-shadow-md md:px-6 md:h-12">
                     Check available dates
                   </button>
+            
                   <span className="flex flex-col items-end md:flex-row md:justify-between md:gap-4 md:items-baseline">
                     <p className="uppercase text-xs text-gray-500 font-montS font-semibold tracking-wide">
                       Price per night

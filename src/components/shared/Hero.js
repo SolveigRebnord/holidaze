@@ -4,11 +4,11 @@ const Hero = ({ img, text }) => {
   const location = useLocation();
 
   return (
-    <section className="relative z-0 mb-12">
+    <section className="relative z-0">
       {location.pathname === "/" && (
         <img
           src={img}
-          className={"h-[600px] min-w-full object-cover lg:h-screen"}
+          className={" min-w-full object-cover h-screen"}
         ></img>
       )}
       {location.pathname == "/account" && (
@@ -18,12 +18,12 @@ const Hero = ({ img, text }) => {
         ></img>
       )}
       {location.pathname !== "/" && location.pathname !== "/account" && (
-        <img src={img} className={"h-[300px] min-w-full object-cover"}></img>
+        <img src={img} className={"h-[300px] min-w-full object-cover object-bottom "}></img>
       )}
 
       <h1
         className={
-          "uppercase absolute bottom-8 text-[40px] left-1/2 -translate-x-1/2 leading-none text-white text-center font-passionOne"
+          "uppercase absolute bottom-10 text-[40px] left-1/2 -translate-x-1/2 leading-none text-purpleBlack text-center font-passionOne"
         }
       >
         {text}

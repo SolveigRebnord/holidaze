@@ -1,24 +1,23 @@
 const ShortAbout = () => {
   return (
-    <section className="bg-purpleBlack text-white py-14 flex flex-col gap-10 mt-14 md:flex-row md:justify-evenly">
+    <section className="bg-purpleBlack text-white py-24 flex flex-col gap-20 md:py-14 md:flex-row md:justify-evenly">
       <div className="flex flex-col items-center justify-center text-center gap-4">
-        <img src="/airplane.svg"></img>
+        <img src="/check.svg"></img>
         <p>
-          Free shipping over 499 NOK <br />
-          Always free returns
+          Verified Venue Managers <br />
+           and reviews
         </p>
       </div>
       <div className="flex flex-col items-center justify-center text-center gap-4">
         <img src="/headset.svg"></img>
         <p>
-          Get in touch, we want you <br /> to have the best experience
+          24/7 customer support <br /> For your whole stay
         </p>
       </div>
       <div className="flex flex-col items-center justify-center text-center gap-4">
-        <img src="/recycle.svg"></img>
+        <img src="/globe.svg"></img>
         <p>
-          Our main goal is substaining <br /> an eco system for the next
-          generation
+          Venues all around the world <br /> 59 countries and 5 continents
         </p>
       </div>
     </section>

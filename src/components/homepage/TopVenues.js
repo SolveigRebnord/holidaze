@@ -13,24 +13,28 @@ const TopVenues = () => {
     dispatch(getVenues());
   }, [dispatch]);
 
-  const firstThree = venues.slice(0, 3);
+  const firstThree = venues.slice(31, 34);
 
   const isMobile = useMediaQuery({ query: `(max-width: 760px)` });
 
   return (
     <>
-      <h2 className="my-20 text-center">Our top venues at the moment</h2>
+    <section className="bg-lightBeige">
+      <h2 className="my-20 text-center font-passionOne text-3xl ">Top venues at the moment</h2>
 
       {isMobile && <Slider site={"home"} media={firstThree} />}
       {!isMobile && (
-        <section className="w-2/3 mx-auto flex flex-col gap-12">
+        <section className="w-fit mx-auto flex flex-col gap-12">
           {firstThree.map((venue, index) => (
             <div key={index} className="h-full w-full">
+               <Link to={`/venues/${venue.id}`}>
+                
               <div
-                className="flex flex-col gap-2 p-1 border border-black w-full md:flex-row-reverse md:justify-between lg:w-2/3 mx-auto"
+                className="flex bg-white  flex-col gap-2 p-1 border border-black w-full md:flex-row-reverse md:justify-between lg:w-2/3 mx-auto"
                 key={venue.id}
               >
                 <div className="w-full h-52 md:w-1/2 md:h-96">
+                  
                   <img
                     src={venue.media}
                     alt={venue.name}
@@ -43,9 +47,9 @@ const TopVenues = () => {
                 </div>
                 <div className="p-4 md:p-6 flex flex-col justify-between md:w-1/2">
                   <div className="mt-2 flex flex-col items-start gap-2">
-                    <h3 className="font-passionOne uppercase text-2xl tracking-wide">
-                      {" "}
-                      <Link to={`/venues/${venue.id}`}>{venue.name}</Link>
+                    <h3 className=" uppercase text-2xl tracking-wide">
+                      {venue.name}
+                     
                     </h3>
                     <div className="flexR justify-normal gap-2 font-semibold">
                       <img src="/map_pin.svg" className="w-6" />
@@ -105,12 +109,12 @@ const TopVenues = () => {
                     </span>
                   </div>
                 </div>
-              </div>
+              </div></Link>
             </div>
           ))}{" "}
         </section>
-      )}
-    </>
+      )}</section>
+      </>
   );
 };
 

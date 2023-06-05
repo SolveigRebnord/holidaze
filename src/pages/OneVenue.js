@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getSingleVenue } from "../store/modules/VenueSlice";
@@ -12,6 +12,7 @@ const OneVenue = () => {
   const dispatch = useDispatch();
   const { singleVenue } = useSelector((state) => state.venues);
   let { id } = useParams();
+  let { user } = useSelector((state) => state.auth)
 
   useEffect(() => {
     if (id) {
@@ -23,10 +24,10 @@ const OneVenue = () => {
     <>
       {singleVenue && (
         <section className="">
-          <Hero img={"/plants.jpg"} text={singleVenue.name}></Hero>
-          <section className="flex flex-col lg:flex-row justify-center lg:gap-20 lg:p-20 lg:px-32">
+          <Hero img={"/sand.jpg"} text={singleVenue.name}></Hero>
+          <section className="flex flex-col lg:flex-row justify-center lg:gap-20 lg:p-20 lg:px-32 mt-20">
             {/* One Venue component */}
-            <div className="lg:w-1/2">
+            <div className="md:w-2/3 mx-auto lg:w-1/2">
               <div>
                 <Slider media={singleVenue.media} site={"venue"}></Slider>
               </div>
@@ -124,7 +125,8 @@ const OneVenue = () => {
               </div>
             </div>
 
-            {/* Booking component */}
+            
+            {user ? 
             <section className=" md:px-32 lg:w-1/3 h-fit py-12  bg-purpleBlack p-6 md:py-20 lg:py-12 lg:px-6 flex flex-col gap-4">
               <div>
                 <div className="uppercase">
@@ -133,10 +135,17 @@ const OneVenue = () => {
                   </h2>
                 </div>
               </div>
-              {/* Search ish component */}
               <BookingForm venue={singleVenue} />
             </section>
-            {/* If true, Display booking details overlay component. Return og confirm knapper. Confirm går til profile og viser din nylige booking. */}
+            : 
+            <section className="w-full mb-12 h-52 bg-purpleBlack text-white flex justify-center items-center gap-4 flex-col">
+               <p>To make a booking or rent out your venue </p>
+              <Link to={'/login'} preventScrollReset={false} className="underline underline-offset-4">
+                Log in or create your account today
+                </Link>
+              </section>
+
+            }
           </section>
         </section>
       )}

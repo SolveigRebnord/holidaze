@@ -1,4 +1,5 @@
 import dayjs from "dayjs";
+import { Field } from "formik";
 import React, { useEffect, useRef, useState } from "react";
 import { tileProps } from "react-calendar/dist/cjs/shared/propTypes";
 import { DateRangePicker } from "react-date-range";
@@ -15,7 +16,7 @@ const CalendarPick = ({ ranges, onChange, formik, setShowCalendar, showCalendar,
           key: "selection",
      });
 
-     const [show, setShow] = useState(false);
+     const [show, setShow] = useState(true);
 
 
  
@@ -26,13 +27,12 @@ const CalendarPick = ({ ranges, onChange, formik, setShowCalendar, showCalendar,
      };
 
 
-    const [isComponentVisible, setIsComponentVisible] = useState(false);
     const ref = useRef(null);
 
     const handleClickOutside = (event) => {
         if (ref.current && !ref.current.contains(event.target)) {
-          setShowCalendar(false); 
-          setShow(true)
+        setShowCalendar(false); 
+        setShow(true)
         }
     };
 
@@ -61,7 +61,7 @@ const CalendarPick = ({ ranges, onChange, formik, setShowCalendar, showCalendar,
 <section className=' h-fit relative'>
         
            {showCalendar && 
-               <div className="absolute left-0 top-0 z-30 h-fit " ref={ref}>
+               <div className="absolute left-0 top-0 h-fit w-fit z-30 " ref={ref}>
                     <DateRangePicker
                          onChange={handleSelect}
                          showSelectionPreview={true}
@@ -72,12 +72,12 @@ const CalendarPick = ({ ranges, onChange, formik, setShowCalendar, showCalendar,
                     />
                     <div className="">
                          <button
-                              className="btn btn-transparent text-primary rounded-0 px-4 mr-2"
+                              className="btn btn-transparent text-primary rounded-0 px-4 mr-2 "
                               onClick={() => setShow(true) + setShowCalendar(false)}
                          >
                               Done
                          </button>
-                         <button
+                         <button type="button"
                               className="btn btn-transparent text-black rounded-0 px-4"
                               onClick={onClickClear}
                          >
@@ -86,27 +86,30 @@ const CalendarPick = ({ ranges, onChange, formik, setShowCalendar, showCalendar,
                     </div>
                </div>}
 
-               <div className="">
+            
 
-               {props.show && 
-               <div className="w-full flex flex-row justify-evenly items-center">
-                    <input name="dateFrom"  onClick={() => setShowCalendar(true)} value={dayjs(selectedDateRange.startDate).format('YYYY/MM/DD') }  className="w-24 text-center">
+               {show && 
+               <div className="w-full flex flex-row justify-evenly items-center gap-6">
+                    <input name="dateFrom"   
+                    onClick={() => setShowCalendar(true)} value={dayjs(selectedDateRange.startDate).format('dddd DD.MM') }className="w-40 text-lg text-center font-sans bg-transparent tracking-wide hover:cursor-pointer border-b border-white focus:outline-none">
                      </input>
-                    <input name="dateTo" onClick={() => setShowCalendar(true)} value={dayjs(selectedDateRange.endDate).format('YYYY/MM/DD') } className="w-24 text-center">
+                     <span className="text-xl"> - </span>
+                    <input name="dateTo" 
+                    onClick={() => setShowCalendar(true)} value={dayjs(selectedDateRange.endDate).format('dddd DD.MM') }  className="w-40 text-lg focus:outline-none text-center font-sans bg-transparent tracking-wide hover:cursor-pointer border-b border-white ">
                     
                     
                     </input>
                     
                </div>}
-               <div className="w-full text-right">
-               <button   onClick={() => setShow(false) + onClickClear()} className="bg-white px-4 py-1 uppercase font-bold text-xs h-fit w-fit my-2">
+               <div className="w-full text-center mt-2">
+               <button type="button"   onClick={() =>  onClickClear()} className="bg-transparent  text-passionOrange  px-4 py-1 uppercase font-bold text-xs h-fit w-fit my-2">
                 Clear
               </button>
                </div>
               
                
 
-               </div>
+              
                </section>
           </>
      );

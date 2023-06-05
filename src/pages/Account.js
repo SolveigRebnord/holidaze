@@ -215,7 +215,7 @@ const Account = () => {
             isActive={activeIndex == 2}
             amount={singleProfile.bookings.length}
           >
-            <section className="w-full px-4 pt-10 md:px-8">
+            <section className="w-full px-4 py-10 md:px-8 ">
               {singleProfile.bookings.map((booking) => (
                 <>
                   {editBooking === "" && (
@@ -284,11 +284,14 @@ const Account = () => {
                                 </p>
                               </span>
                             </div>
-                            <div>
-                              <button onClick={() => setEditBooking(booking)}>
+                            <div className="flex flex-row gap-8">
+                              <button onClick={() => setEditBooking(booking)}
+                                     className="p-2 px-8 bg-lightBeige font-semibold uppercase tracking-wide shadow-md rounded-s-full rounded-e-full" 
+                                             >
                                 Edit
                               </button>
                               <button
+                              className="p-2 px-8 bg-passionOrange font-semibold uppercase tracking-wide shadow-md rounded-s-full rounded-e-full"
                                 onClick={() =>
                                   window.confirm(
                                     "Are you sure you want to delete this booking? It can not be restored"
@@ -301,7 +304,7 @@ const Account = () => {
                                     : null
                                 }
                               >
-                                Delete
+                                Cancel
                               </button>
                             </div>
                           </div>
@@ -420,11 +423,12 @@ const Account = () => {
                             </div>
                           </div>
                           <hr className=" bg-black shadow-none border-none h-0.5 mb-2" />
-                          <div>
-                            <button onClick={() => setfixVenue(venue)}>
+                          <div className="flex flex-row gap-8">
+                            <button className="p-2 px-8 bg-lightBeige font-semibold uppercase tracking-wide shadow-md rounded-s-full rounded-e-full" onClick={() => setfixVenue(venue)}>
                               Edit
                             </button>
                             <button
+                            className="p-2 px-8 bg-passionOrange font-semibold uppercase tracking-wide shadow-md rounded-s-full rounded-e-full"
                               onClick={() =>
                                 window.confirm(
                                   "Are you sure you want to delete this venue? It can not be restored"

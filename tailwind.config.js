@@ -2,6 +2,7 @@
 module.exports = {
   content: ["./src/**/*.{html,js}"],
   theme: {
+ 
     extend: {
       backgroundImage: {
         poolFloor: "url('../public/pool_floor.jpg')",
@@ -16,7 +17,7 @@ module.exports = {
         lightBeige: "#FDF3E8",
       },
       content: {
-        img: 'url("../public/profile_icon.svg")',
+        img: 'url("../public/user.svg")',
       },
     },
     plugins: [],

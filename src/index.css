@@ -6,6 +6,10 @@
   background-color: theme("colors.purpleBlack");
 }
 
+* {
+  @apply font-montS
+}
+
 ul.indicators {
   margin: 0;
   padding: 0;

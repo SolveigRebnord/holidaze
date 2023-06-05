@@ -8,17 +8,18 @@ import ShortAbout from "../components/homepage/ShortAbout";
 import TopVenues from "../components/homepage/TopVenues";
 
 const Homepage = () => {
+
+ 
   return (
     <>
       <Hero
         img={"/beach_hero.jpg"}
-        text={"Ready for your next adventure?"}
         className={"h-[600px] bottom-5 text-[52px] z-0 absolute"}
       />
       <HomeSearch className={"z-20"} />
       {/* Skal gi ut input på submit, sendes til ny side og sender med inputdataene */}
       <ShortAbout />
-      <TopVenues></TopVenues>
+  
     </>
   );
 };
