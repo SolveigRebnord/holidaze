@@ -14,10 +14,10 @@ const Footer = () => {
 
 
   return (
-    <footer className="h-72 bg-passionOrange  p-4 lg:p-8 gap-14 lg:gap-0  flex flex-col justify-end items-center relative">
+    <footer className="h-72 bg-passionOrange p-4 lg:p-8 gap-14 lg:gap-0  flex flex-col justify-end items-center relative">
       <ul className="w-full flex flex-col gap-8 items-center justify-center lg:pb-8">
         {menuItems.map((item) => (
-          <li className="hover:underline underline-offset-8 relative w-fit">
+          <li className="hover:underline underline-offset-8 relative w-fit" key={item.title}>
             <NavLink to={item.link}>{item.title}</NavLink>
           </li>
         ))}

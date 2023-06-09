@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Formik, Field, Form, ErrorMessage } from "formik";
-import * as Yup from "yup";
-import { register } from "../../store/modules/AuthSlice";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { Formik, Form } from "formik";
+import { login, register } from "../../store/modules/AuthSlice";
+import FormInput from "../FormInput";
+import { signUpSchema } from "../../schemas/RegisterSchemas";
 
 const SignUp = () => {
-  const [successful, setSuccessful] = useState(false);
 
   const [showError, setError] = useState(false);
-
+  const [profileAvatar, setProfileAvatar] = useState('')
   const dispatch = useDispatch();
 
   const initialValues = {
@@ -21,87 +21,75 @@ const SignUp = () => {
   };
 
   const profileImages = [
-    { id: 1, url: "/no_image.png" },
+    { id: 1, url: "https://cdn1.vectorstock.com/i/1000x1000/06/70/brunette-businessman-avatar-man-face-profile-icon-vector-21960670.jpg" },
     {
       id: 2,
-      url: "https://newprofilepic2.photo-cdn.net//assets/images/article/profile.jpg",
+      url: "https://img.freepik.com/premium-vector/avatar-icon001_750950-50.jpg",
     },
   ];
 
-  const validationSchema = Yup.object().shape({
-    name: Yup.string()
-      .test(
-        "len",
-        "The username must be between 3 and 20 characters.",
-        (val) =>
-          val && val.toString().length >= 3 && val.toString().length <= 20
-      )
-      .required("This field is required!"),
-    email: Yup.string()
-      .email("This is not a valid email.")
-      .required("This field is required!"),
-    password: Yup.string()
-      .test(
-        "len",
-        "The password must be between 6 and 40 characters.",
-        (val) =>
-          val && val.toString().length >= 6 && val.toString().length <= 40
-      )
-      .required("This field is required!"),
-  });
+
+
+
 
   const handleRegister = (formValue) => {
-    const { name, email, password, avatar } = formValue;
+    const { name, email, password } = formValue;
 
-    console.log(formValue);
-    setSuccessful(false);
+    let avatar = profileAvatar
+
 
     dispatch(register({ name, email, password, avatar }))
       .unwrap()
-      .then((data) => {
-        console.log(data);
-        //setSuccessful(true);
+      .then(() => {
+        dispatch(login({email, password}))
+        setTimeout(() => {
+          window.location.replace('/account')
+        }, 2000);
       })
       .catch((error) => {
         console.log(error);
         if (error === "Profile already exists") {
-          setError(true);
+          setError(error);
+        }
+        if (error) {
+          setError(error);
         }
 
-        setSuccessful(false);
       });
   };
 
   return (
     <>
-      <h2 className="mt-20 font-passionOne text-white text-3xl text-center">
+    <hr className="bg-white h-0.5 mb-8"></hr>
+      <h2 className=" font-passionOne text-white text-3xl text-center">
         Register
       </h2>
-      <div className="text-white my-20 lg:w-1/2 mx-auto border p-6 border-white rounded-md ">
+      <div className="text-white pb-20 pt-10 lg:w-1/2 mx-auto md:border p-6 border-white rounded-md ">
         <div className="">
           <Formik
             initialValues={initialValues}
-            validationSchema={validationSchema}
+            validationSchema={signUpSchema}
             onSubmit={handleRegister}
           >
             <Form>
-              {!successful && (
+          
                 <div className="flex flex-col gap-10 ">
                   <div className="flex flex-col gap-2 items-center">
-                    <h3 className="font-passionOne text-2xl">
+                    <h3 className="font-passionOne text-light text-2xl">
                       Choose your avatar
                     </h3>
-                    <p className="text-xs font-montS">
+                    <p className="text-sm font-montS">
                       &#40;You can add your own image later&#41;
                     </p>
                   </div>
                   <div className="flex flex-row justify-evenly items-center">
                     {profileImages.map((img) => (
                       <label>
-                        <Field
+                        <input
                           type="radio"
                           name="avatar"
-                          value={img.url}
+                          id="avatar"
+                          onChange={() => setProfileAvatar(img.url)} 
                           className="hidden w-full h-full "
                         />
                         <img
@@ -112,48 +100,29 @@ const SignUp = () => {
                     ))}
                   </div>
 
-                  <div className="mx-auto w-2/3 flex flex-col gap-4">
-                    <div className="flex flex-col gap-2">
-                      <label htmlFor="name">Name</label>
-                      <Field
-                        name="name"
-                        type="text"
-                        className="w-full h-12 px-4 text-black text-sm rounded-md"
-                      />
-                      <ErrorMessage
-                        name="name"
-                        component="div"
-                        className="text-sm text-right text-passionOrange"
-                      />
-                    </div>
+                  <div className="mx-auto text-purpleBlack w-full px-4 flex flex-col gap-2">
+                  <FormInput
+                  label="Name"
+                  id="name"
+                  name="name"
+                  type="text"
+                  page='login'
+                />
+                  <FormInput
+                  label="Email"
+                  id="email"
+                  name="email"
+                  type="email"
+                  page='login'
+                />
+                   <FormInput
+                  label="Password"
+                  id="password"
+                  name="password"
+                  type="password"
+                  page='login'
+                />
 
-                    <div className="flex flex-col gap-2">
-                      <label htmlFor="email">Email</label>
-                      <Field
-                        name="email"
-                        type="email"
-                        className="w-full h-12 px-4 text-black text-sm rounded-md"
-                      />
-                      <ErrorMessage
-                        name="email"
-                        component="div"
-                        className="text-sm text-right text-passionOrange"
-                      />
-                    </div>
-
-                    <div className="flex flex-col gap-2">
-                      <label htmlFor="password">Password</label>
-                      <Field
-                        name="password"
-                        type="password"
-                        className="w-full h-12 px-4 text-black text-sm rounded-md"
-                      />
-                      <ErrorMessage
-                        name="password"
-                        component="div"
-                        className="text-sm text-right text-passionOrange"
-                      />
-                    </div>
                   </div>
                   <div className="form-group">
                     <button type="submit" className="orangeBtn">
@@ -161,22 +130,24 @@ const SignUp = () => {
                     </button>
                   </div>
                 </div>
-              )}
+          
             </Form>
           </Formik>
         </div>
         {showError && (
-          <div className="bg-white text-center w-fit px-12 py-6 text-black text-xs mx-auto my-6 border-2 border-passionOrange ">
+          <div className="bg-white text-center flex flex-col gap-2 w-fit px-6 py-6 text-black text-xs mx-auto my-6 border-2 border-passionOrange ">
             <h3>Oh no!</h3>
+            <p className="font-semibold">{showError}</p>
             <p>
-              Is it possible you might already have an account? <br></br>
-              Try to log in above, or get in touch with us
-            </p>
+              There seems to be a problem, or is it possible you might already have an account? <br /> <br />
+              Try again, or get in touch with us
+            </p> 
           </div>
         )}
       </div>
     </>
   );
 };
+// add noroff email error
 
 export default SignUp;

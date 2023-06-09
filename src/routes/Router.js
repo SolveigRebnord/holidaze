@@ -4,7 +4,6 @@ import Layout from "../components/Layout";
 import Venues from "../pages/Venues";
 import OneVenue from "../pages/OneVenue";
 import LogIn from "../pages/LogIn";
-import Register from "../pages/Register";
 import Account from "../pages/Account";
 import Homepage from "../pages/Homepage";
 
@@ -30,10 +29,7 @@ const router = createBrowserRouter([
         path: "/login",
         element: <LogIn />,
       },
-      {
-        path: "/register",
-        element: <Register />,
-      },
+
       {
         path: "/account",
         element: <Account />,

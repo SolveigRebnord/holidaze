@@ -32,7 +32,7 @@ ul.indicators {
 }
 
 .input-error {
-  @apply border-4 border-pink-500;
+  @apply bg-red-200 ;
 }
 
 .number-input {

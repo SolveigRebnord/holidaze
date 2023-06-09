@@ -1,12 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Navigate, useNavigate } from "react-router-dom";
 import { Formik, Field, Form, ErrorMessage } from "formik";
-import * as Yup from "yup";
-
 import { login } from "../store/modules/AuthSlice";
-import Register from "./Register";
 import SignUp from "../components/signup/SignUp";
+import { logInSchema } from "../schemas/RegisterSchemas";
+import FormInput from "../components/FormInput";
 
 const Login = () => {
   let navigate = useNavigate();
@@ -26,10 +25,7 @@ const Login = () => {
     password: "",
   };
 
-  const validationSchema = Yup.object().shape({
-    email: Yup.string().required("This field is required!"),
-    password: Yup.string().required("This field is required!"),
-  });
+  
 
   const handleLogin = (formValue) => {
     const { email, password } = formValue;
@@ -52,77 +48,68 @@ const Login = () => {
     return <Navigate to="/" />;
   }
 
+
   return (
     <div className="pt-32 login-form bg-purpleBlack">
       <div className="">
         <h1 className="text-white font-passionOne text-2xl text-center tracking-wider uppercase">
           Sign In
         </h1>
+        
         <Formik
           initialValues={initialValues}
-          validationSchema={validationSchema}
+          validationSchema={logInSchema}
           onSubmit={handleLogin}
         >
-          <Form className="mx-6 font-montS flex flex-col gap-8 my-12">
-            <div className="form-group flex-col flex gap-2">
-              <label htmlFor="email" className="text-white">
-                Email
-              </label>
-              <Field
-                name="email"
-                type="text"
-                className="form-control h-14 w-full rounded-md px-4"
-              />
-              <ErrorMessage
-                name="email"
-                component="div"
-                className="alert text-white"
-              />
-            </div>
-
-            <div className="form-group flex-col flex gap-2">
-              <label htmlFor="password" className="text-white">
-                Password
-              </label>
-              <Field
-                name="password"
-                type="password"
-                className="form-control  h-14 w-full rounded-md"
-              />
-              <ErrorMessage
-                name="password"
-                component="div"
-                className="alert text-white"
-              />
-            </div>
+         
+          <Form className="mx-6 font-montS flex flex-col gap-3 my-12">
+      
+            <FormInput
+              label="Email"
+              id="email"
+              name="email"
+              type="text"
+              page='login'
+            />
+             <FormInput
+              label="Password"
+              id="password"
+              name="password"
+              type="text"
+              page='login'
+            />
+             
 
             <div className="form-group">
-              <button type="submit" className="text-white" disabled={loading}>
-                {loading && (
-                  <span className="spinner-border spinner-border-sm"></span>
-                )}
-                <span>Login</span>
+              <button type="submit" className="orangeBtn" disabled={loading}>
+              
+              Login
+
               </button>
             </div>
             {showError && (
-              <div>
-                <p>Invalid, do you have an account</p>
+              <div className="text-purpleBlack bg-white p-8 text-center flex flex-col gap-2 my-6">
+                <p className="font-semibold">Are you sure you have an account?</p>
+                <p>Try again, or scroll down to register a new account</p>
               </div>
             )}
           </Form>
+
         </Formik>
 
-        <div className="text-white">
-          <h2 className="text-center">
+        <div className="text-white pb-20 flex flex-col gap-4 text-center">
+          <h2 className="font-semibold text-lg">
             Dont have an account?
+            </h2>
             <button
               onClick={() => setRegister(true)}
-              className="block mx-auto "
+              className="block mx-auto border-2 border-passionOrange px-8 py-2"
             >
               Register now
             </button>
-            to book your next holiday destination!
-          </h2>
+            
+            <p>to book your next holiday destination!</p>
+        
         </div>
 
         {showRegister && <SignUp />}

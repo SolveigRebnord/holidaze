@@ -90,7 +90,9 @@ fixed ${sticky}`;
           <nav className="hidden md:flex">
             <ul className="flex flex-row gap-16 mr-4">
               {menuItems.map((item) => (
-                <li className="hover:underline box-border relative underline-offset-8 last-of-type:after:content-img  last-of-type:after:absolute h-fit after:left-14 text-base ">
+                <li
+                key={item.title}
+                className="hover:underline box-border relative underline-offset-8 last-of-type:after:content-img  last-of-type:after:absolute h-fit after:left-14 text-base ">
                   <NavLink to={item.link}>{item.title}</NavLink>
                 </li>
               ))}
