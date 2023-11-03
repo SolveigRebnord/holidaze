@@ -1,0 +1,100 @@
+$smallScreen: 480px;
+$medium-screen: 768px;
+$large-screen: 1024px;
+
+.form { 
+display: flex; 
+position: absolute; 
+width: 100%;
+left: 0%;
+top: 0; 
+z-index: 10; 
+padding: 2.5rem; 
+padding-left: 1rem;
+padding-right: 1rem; 
+flex-direction: column; 
+gap: 2.5rem; 
+justify-content: center; 
+align-items: center; 
+width: 100%; 
+height: 100vh; 
+font-size: 0.875rem;
+line-height: 1.25rem; 
+color: #ffffff; 
+--bg-opacity: 70%; 
+
+box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); 
+background: rgba(0, 25, 32, 80%);
+
+    @media screen and (min-width: $medium-screen) {
+
+       
+        input {
+            font-size: medium;
+            max-width: 8rem;
+        }
+    }
+}
+
+.cal-btn {
+padding: 0.5rem; 
+border-radius: 0.375rem; 
+border-width: 1px; 
+width: fit-content; 
+transition-property: all;
+transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+transition-duration: 300ms; 
+transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); 
+box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); 
+
+@media screen and (max-width: $medium-screen) {
+    padding: 0.3rem; 
+
+    img {
+        width: 2rem;
+    }
+}
+}
+
+.calendar-home {
+
+}
+
+.calendar-venues {
+    position: initial;
+    height: fit-content;
+
+}
+
+/* Utseende venues search
+ <Formik initialValues={
+          initialVal
+        }
+     
+      onSubmit={onSubmit} 
+      onChange={handleSelect}>
+        {() => (
+         <Form className="bg-white p-2 font-montS text-sm text-black">
+          
+               <div className=" text-center my-4">
+                  <button onClick={() => setShowCalendar(!showCalendar)} ><img src="/calendar.svg" className="w-8 ring-2 ring-offset-4 ring-passionOrange rounded-sm shadow-md" /></button>
+                </div>
+            <div className="w-full p-2">
+              <CalendarPick setShowCalendar={setShowCalendar} show={show} showCalendar={showCalendar} setSelectedDateRange={setSelectedDateRange} />
+              <hr className="bg-black my-4"></hr>
+              <div className="flex flex-row gap-2 items-center justify-center">
+              <span>Minimum</span>
+                <FormInput
+                className="w-full text-right "
+                name="guests"
+                id="guests"
+                type="number"
+             
+                ></FormInput>
+                <span>Guests</span>
+              </div>
+            </div>
+            <button className="orangeBtn my-4"  type="submit">Search</button>
+           </Form>)}
+          </Formik>
+          */

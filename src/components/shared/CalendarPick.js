@@ -1,7 +1,6 @@
 import dayjs from "dayjs";
 import { Field } from "formik";
 import React, { useEffect, useRef, useState } from "react";
-import { tileProps } from "react-calendar/dist/cjs/shared/propTypes";
 import { DateRangePicker } from "react-date-range";
 
 import "react-date-range/dist/styles.css"; // main style file

@@ -2,6 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
+ 
+.no-spin::-webkit-inner-spin-button,
+.no-spin::-webkit-outer-spin-button {
+    -webkit-appearance: none !important;
+    margin: 0 !important;
+    
+ 
+}
+
+.no-spin {
+    -moz-appearance: textfield !important;
+}
+
 .is-sticky {
   background-color: theme("colors.purpleBlack");
 }
@@ -51,16 +64,14 @@ ul.indicators {
   @apply h-40 text-left;
 }
 
-.input-ok {
-  @apply border-passionOrange border-4;
-}
 
 .zip-input {
   @apply place-self-end;
+
 }
 
 .react-calendar {
-  @apply w-[full] h-[fit] max-w-full bg-purpleBlack leading-[1.125em] m-auto font-montS;
+  @apply w-[full] h-[fit] max-w-full bg-blue-200 leading-[1.125em] m-auto font-montS;
 }
 
 .react-calendar--doubleView {

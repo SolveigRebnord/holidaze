@@ -84,7 +84,7 @@ fixed ${sticky}`;
     <>
       <header className={classes}>
         <NavLink to={"/"}>
-          <img src="/holidaze_logo.svg" className="w-40" alt=" logo"></img>
+          <p className="w-40 text-xl text-right" >Holidaze</p>
         </NavLink>
         <div className="flex flex-row gap-6 md:gap-8 justify-end items-center w-full">
           <nav className="hidden md:flex">

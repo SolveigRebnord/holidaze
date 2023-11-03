@@ -1,33 +1,26 @@
 import { useDispatch, useSelector } from "react-redux";
+import './calendar.scss'
 import {
-  useFormik,
-  FormikProvider,
+ 
   useField,
-  Field,
+
   Formik,
   Form,
-  FieldArray,
-  FastField,
-  useFormikContext,
+
 } from "formik";
-import * as yup from "yup";
-import React, { isValidElement, useEffect, useRef } from "react";
+
+import React, {  useEffect, useRef } from "react";
 import { useState } from "react";
 import { type } from "@testing-library/user-event/dist/type";
-import BookingSchema from "../schemas/BookingSchema";
+
 import dayjs from "dayjs";
-import { DateRange } from "react-date-range";
-import { editBooking, makeBooking } from "../store/modules/BookingSlice";
-import { useFormAction, useNavigate } from "react-router-dom";
-import { getSingleProfile } from "../store/modules/ProfilesSlice";
-import Calendar from "react-calendar";
-import CountryList from "./CountryList";
-import CalendarPick from "./shared/CalendarPick";
-import BookingSearchSchema from "../schemas/BookingSearchSchema";
-import { DateRangePicker } from "react-date-range";
+import './calendar.css';
+import {  useNavigate } from "react-router-dom";
 
 import "react-date-range/dist/styles.css"; // main style file
 import "react-date-range/dist/theme/default.css"; // theme css file
+import Calendar from "react-calendar";
+import { date } from "yup";
 
 var relativeTime = require("dayjs/plugin/relativeTime");
 
@@ -35,8 +28,7 @@ dayjs.extend(relativeTime);
 
 const FormInput = ({ label, value, ...props }) => {
   const [field, meta] = useField(props);
-  console.log(meta.error)
-  console.log(field.value)
+  
 
   return (
     <>
@@ -67,12 +59,13 @@ const FormInput = ({ label, value, ...props }) => {
   );
 };
 
+
 const GuestsInput = ({ label, value, ...props }) => {
   const [field, meta] = useField(props);
 
   return (
     <>
-      <div className={"flex flex-row justify-center items-end gap-8"}>
+      <div className="flex flex-row justify-center items-end gap-8">
         <label className='font-normal tracking-widest text-base uppercase'>
           {label}
         </label>
@@ -82,13 +75,13 @@ const GuestsInput = ({ label, value, ...props }) => {
           {...field}
           {...props}
           value={value}
-          className={`pl-4  h-14 p-2 w-14 text-center text-lg  bg-transparent border-b-2 border-passionOrange focus:outline-none
+          className={`pl-4 h-14 p-4 w-20 text-center no-spin text-lg bg-transparent border-b-passionOrange border-b-2 focus:outline-none
         ${meta.touched && meta.error ? "input-error" : ""}
         ${meta.touched && !meta.error && "input-ok"}`}
         />
       </div>
       <div className="h-4">
-        {meta.touched &&  meta.error && (
+        {meta.touched && meta.error && (
           <p className="block ">{meta.error}</p>
         )}
       </div>
@@ -96,8 +89,11 @@ const GuestsInput = ({ label, value, ...props }) => {
   );
 };
 
+
 const HomeSearch = ({ ...props }) => {
   const [inputText, setInputText] = useState("");
+  const [showCalendar, setShowCalendar] = useState(false);
+  console.log(props)
 
   const dispatch = useDispatch();
   const { user: currentUser } = useSelector((state) => state.auth);
@@ -108,29 +104,22 @@ const HomeSearch = ({ ...props }) => {
     setInputText(lowerCase);
   };
 
-  const [showCalendar, setShowCalendar] = useState(false);
+
+  
 
   const navigate = useNavigate();
 
-  const [selectedDateRange, setSelectedDateRange] = useState({
-    startDate: new Date(),
-    endDate: new Date(),
-    key: "selection",
-  });
 
-  const [show, setShow] = useState(true);
-  const [isOk, setIsOk] = useState(false);
+ 
 
-  const handleSelect = (ranges) => {
-    setSelectedDateRange(ranges.selection);
-  };
 
   const ref = useRef(null);
 
   const handleClickOutside = (event) => {
+   
     if (ref.current && !ref.current.contains(event.target)) {
       setShowCalendar(false);
-      setShow(true);
+    
     }
   };
 
@@ -141,68 +130,101 @@ const HomeSearch = ({ ...props }) => {
     };
   }, []);
 
+
   const onClickClear = () => {
-    setSelectedDateRange({
-      startDate: new Date(),
-      endDate: new Date(),
-      key: "selection",
-    });
+    
   };
 
   const onSubmit = (values) => {
     let bookingBody = {
-      dateFrom: selectedDateRange.startDate,
-      dateTo: selectedDateRange.endDate,
-      guests: values.guests,
+      dateFrom: dateFrom,
+      dateTo: dateTo,
+      guests: values.guests
+
     };
+
     console.log(bookingBody);
-
-
-    
+    props.onSubmit(bookingBody) 
+   
  
-        navigate("/venues", {
-          state: {
-            search: bookingBody,
-          },
-        });
-    
+        
   };
+
+console.log(props.initialValues)
+
+  const [value, setValue] = useState([props.initialValues.dateFrom, props.initialValues.dateTo]);
+  const [dateFrom, changeDateFrom] = useState(props.initialValues[0])
+  const [dateTo, changeDateTo] = useState(props.initialValues[1])
+
+if (dateFrom !== value[0]) {
+  changeDateFrom(value[0])
+}
+if (dateTo !== value[1]) {
+  changeDateTo(value[1])
+}
+
+
+
+  const CALbtn = () => {
+  
+    setShowCalendar(!showCalendar)
+    };
+  
 
   return (
     <>
       <Formik
         initialValues={{
-          startDate: selectedDateRange.startDate,
-          endDate: selectedDateRange.endDate,
-          guests: 0,
+          dateFrom: dateFrom,
+          dateTo: dateTo,
+          guests: props.initialValues.guests,
         }}
         
         onSubmit={onSubmit}
-        onChange={handleSelect}
+        onChange={setValue}
       >
         {() => (
-          <Form className=" font-montS text-sm  flex flex-col gap-6 items-center  mx-auto z-10 absolute top-1/3 -translate-x-1/2 left-1/2 bg-[#001920] bg-opacity-90 backdrop-blur-sm md:w-1/2 p-10 lg:p-12  shadow-md text-white">
-            <div className="h-20">
-              <button type="button" onClick={() => setShowCalendar(!showCalendar)}>
+        
+          <Form className={`form ${props.className}`}>
+              <div className="relative text-center" ref={ref} >
+              <div className="h-20 relative">
+              <button type="button"  onClick={CALbtn}  className="cal-btn">
   
-                <img src="/calendar_white.svg" className="w-fit  border borde-white p-2 shadow-sm shadow-gray-300 hover:drop-shadow hover:border-2 hover:scale-105 transition-all ease-in-out duration-50 rounded-md" />
+                <img src="/calendar_white.svg"  />
 
               </button>
             </div>
-      
-              <div className="" ref={ref}>
-                <CalendarPick
-                   setShowCalendar={setShowCalendar} setShow={setShow} show={show} showCalendar={showCalendar} setSelectedDateRange={setSelectedDateRange}
-                />
+              <div className="w-fit flex flex-row justify-evenly items-center gap-6">
+                    <input name="dateFrom" 
+                    onClick={() => setShowCalendar(!showCalendar)} value={dayjs(dateFrom).format('ddd   DD / MM') }  className=" text-lg text-center font-sans bg-transparent tracking-wide hover:cursor-pointer border-b border-white focus:outline-none">
+                     </input>
+                     <span className="text-xl"> - </span>
+                    <input name="dateTo" 
+                    onClick={() => setShowCalendar(!showCalendar)} value={dayjs(dateTo).format('ddd   DD / MM') }  className="text-lg focus:outline-none text-center font-sans bg-transparent tracking-wide hover:cursor-pointer border-b border-white ">
+                    
+                    
+                    </input>
+                    
+               </div>
+               <div className="w-full text-center mt-2">
+               <button type="button"   onClick={() =>  onClickClear()} className="bg-transparent  text-passionOrange  px-4 py-1 uppercase font-bold text-xs h-fit w-fit my-2">
+                Clear
+              </button>
+               </div>
+                
+                {showCalendar && 
+                <Calendar  value={value} onChange={setValue} returnValue="range" defaultView="month" minDate={new Date()} selectRange={true} className={'absolute top-40'}
+                />}
+                
                 
               </div>
-      
-
  <GuestsInput
               label="Guests"
               id="guests"
               name="guests"
               type="number"
+              min='1'
+           
             />
            
 

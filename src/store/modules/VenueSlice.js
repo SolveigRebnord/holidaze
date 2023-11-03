@@ -55,7 +55,7 @@ export const getVenues = () => async (dispatch) => {
     });
 };
 
-export const getFilteredVenues = (filter) => async (dispatch) => {
+export const getFilteredVenues = (filter, number) => async (dispatch) => {
   axios({
     method: "get",
     url: `https://nf-api.onrender.com/api/v1/holidaze/venues?limit=50&sort=${filter}`,

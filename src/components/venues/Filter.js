@@ -29,6 +29,7 @@ const Filter = (props) => {
       {isComponentVisible && (
         <section className="fixed w-full left-0 top-0 h-full z-20 bg-white flex flex-col items-center justify-start p-8 gap-6">
           {props.children}
+          <button type="submit">Search</button>
           <button onClick={() => setIsComponentVisible(false)}>X</button>
         </section>
       )}

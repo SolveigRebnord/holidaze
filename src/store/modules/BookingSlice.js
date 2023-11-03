@@ -24,8 +24,7 @@ const BookingSlice = createSlice({
 
 export default BookingSlice.reducer;
 
-const { SET_BOOKINGS, SET_SINGLE_BOOKING, SET_FILTERED_BOOKINGS } =
-  BookingSlice.actions;
+const { SET_BOOKINGS, SET_SINGLE_BOOKING, SET_FILTERED_BOOKINGS } = BookingSlice.actions;
 
 const header = authHeader();
 console.log(header);
