@@ -40,13 +40,26 @@ const {
 
 const header = authHeader();
 
-export const getVenues = () => async (dispatch) => {
+function filterByGuest(array, filter) {
+  return array.filter((venue) => venue.maxGuests >= filter);
+ }
+
+export const getVenues = (sort, order, filter) => async (dispatch) => {
+  console.log(sort, order, filter)
+  let url;
+  sort ? url = `https://nf-api.onrender.com/api/v1/holidaze/venues?limit=100&sort=${sort}` 
+  : url = "https://nf-api.onrender.com/api/v1/holidaze/venues?limit=100"
+
   axios({
     method: "get",
-    url: "https://nf-api.onrender.com/api/v1/holidaze/venues?limit=50",
+    url: url,
   })
     .then(function (response) {
       let data = response.data;
+      let finalData;
+
+      filter !== 0 && sort === 'maxGuests' ? finalData = filterByGuest(filter) : finalData = data
+     
 
       dispatch(SET_VENUES(data));
     })
@@ -55,17 +68,25 @@ export const getVenues = () => async (dispatch) => {
     });
 };
 
-export const getFilteredVenues = (filter, number) => async (dispatch) => {
+export const getFilteredVenues = (sort, filter, order) => async (dispatch) => {
+  console.log(sort, filter, order)
+
+  if (sort === 'guests') sort = 'maxGuests'
+
+  
   axios({
     method: "get",
-    url: `https://nf-api.onrender.com/api/v1/holidaze/venues?limit=50&sort=${filter}`,
+    url: `https://nf-api.onrender.com/api/v1/holidaze/venues?limit=100&sort=${sort}&sortOrder=asc`
   })
     .then(function (response) {
       let data = response.data;
       console.log(data);
-      let filtered = data.filter((item) => {
-        return item.maxGuests < 5;
-      });
+      let filtered = [];
+      
+
+
+    console.log(filtered)
+
       dispatch(SET_FILTERED_VENUES(filtered));
     })
     .catch(function (error) {

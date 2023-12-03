@@ -1,40 +1,54 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { getVenues, searchVenues } from "../store/modules/VenueSlice";
+import { getFilteredVenues, getVenues, searchVenues } from "../store/modules/VenueSlice";
 import { useLocation } from "react-router-dom";
 import {useState, React} from 'react';
 import Hero from "../components/shared/Hero";
 import Filter from "../components/venues/Filter";
 import HomeSearch from "../components/HomeSearch";
 import DisplayVenue from "../components/DisplayVenue";
+import NewFilter from "../components/NewFilter";
+import { act } from "react-dom/test-utils";
 
 const Venues = () => {
   const dispatch = useDispatch();
   const { venues } = useSelector((state) => state.venues);
-  const { filteredVenues } = useSelector((state) => state.venues);
   const [activeFilter, setActiveFilter] = useState(false);
+
+  const [order, setOrder] = useState('desc');
+  const [Val1, setValg1] = useState('');
+  const [minGuests, setMinGuests] = useState(0);
+  const [priceGap, setPriceGap] = useState(0);
+  let filter;
 
   const navigate = useNavigate()
   const location = useLocation()
 
   useEffect(() => {
-    dispatch(getVenues());
-  }, [dispatch]);
+    dispatch(getVenues(Val1, order, filter));
+  }, [Val1, minGuests, priceGap]);
 
-  let activeVenues = [];
 
-  if (activeFilter) {
-    activeVenues = filteredVenues
-  }  else {
-    activeVenues = venues
-  } 
+  let venuesByPrice = [];
+  venues.map((venue) => (
+     venuesByPrice.push(venue.price)
+    ))
+
+  const min = Math.min(...venuesByPrice)
+  const max = Math.max(...venuesByPrice)
+
+  Val1 && minGuests !== 0 ? filter = minGuests : filter = null;
+  Val1 && priceGap !== 0 ? filter = priceGap : filter = null;
+
+
+console.log(filter)
+
+  let activeVenues = venues;
+
 
   const { user: currentUser } = useSelector((state) => state.auth);
 
-
-  const [maxGuestsFilter, setMaxGuestsFilter] = useState("");
-  const [  priceFilter, setPriceFilter] = useState("");
 
 
   let homeData;
@@ -83,7 +97,7 @@ const onSubmit = (values) => {
     guests: values.guests
   }
   dispatch(searchVenues(searchBody))
-  setActiveFilter(true)
+
   //setForm(false)
   //actions.resetForm()
  
@@ -116,19 +130,19 @@ const onSubmit = (values) => {
 
         {/* Filter/Sort component */}
         <div className="flexR my-8 mx-6 md:w-2/3 lg:w-1/2 md:mx-auto">
-          <Filter filter={false} >
-            <div>
-              <p>Filter</p>
-              <input type="range" id="maxGuestsFilter" onChange={(e) => setMaxGuestsFilter(e.target.value)} min={1} max={100} step={1}></input>
-              <p>{maxGuestsFilter}</p>
-
-              <input type="range" id="priceFilter" onChange={(e) => setPriceFilter(e.target.value)} min={1} max={10000} step={1} className="w-96"></input>
-              <p>{priceFilter}</p>
-
-              <label>Wifi</label>
-              <input type="checkbox" id="wifiFilter" ></input>
-            </div>
-          </Filter>
+         
+         
+            <NewFilter 
+            min={min} 
+            max={max} 
+            Val1={Val1} 
+            setValg1={setValg1} 
+            setPriceGap={setPriceGap} 
+            priceGap={priceGap} minGuests={minGuests} 
+            setMinGuests={setMinGuests} 
+            setActiveFilter={setActiveFilter} 
+            venues={activeVenues} ></NewFilter>
+            
           <button className="bg-white border border-purpleBlack w-40 p-2 h-12 text-sm flexR">
             Sort
             <img src="/sort.svg" className="w-6" />

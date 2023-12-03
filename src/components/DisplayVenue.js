@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 const DisplayVenue = ({venue}) => {
     const navigate = useNavigate()
-    
+   
     return ( 
         <div
               className="flex flex-col gap-2 p-1 border border-black w-full md:flex-row-reverse md:justify-between lg:w-2/3 mx-auto"
