@@ -8,16 +8,15 @@ import {
   Form,
   FieldArray,
 } from "formik";
-import * as yup from "yup";
+
 import React from "react";
-import { useState } from "react";
+
 import { type } from "@testing-library/user-event/dist/type";
 import BookingSchema from "../schemas/BookingSchema";
 import dayjs from "dayjs";
-import { DateRange } from "react-date-range";
+
 import { editBooking, makeBooking } from "../store/modules/BookingSlice";
-import { useFormAction } from "react-router-dom";
-import { getSingleProfile } from "../store/modules/ProfilesSlice";
+
 
 var relativeTime = require("dayjs/plugin/relativeTime");
 
@@ -58,12 +57,7 @@ const EditBooking = ({ ...props }) => {
   const { user: currentUser } = useSelector((state) => state.auth);
   const { singleProfile } = useSelector((state) => state.profiles);
 
-  const [nights, setNights] = useState("");
-  const [totalPrice, setTotalPrice] = useState("");
 
-  const [isSent, setIsSent] = useState(false);
-
-  console.log(props.booking);
 
   const onSubmit = (values) => {
     let bookingBody = {
@@ -71,13 +65,12 @@ const EditBooking = ({ ...props }) => {
       dateTo: values.dateTo,
       guests: values.guests,
     };
+    console.log(bookingBody, props.booking.id)
     dispatch(editBooking(bookingBody, props.booking.id))
       .then((data) => {
         console.log(data);
-        dispatch(getSingleProfile(currentUser.name));
-        setTimeout(() => {
-          props.setEditBooking("");
-        }, 500);
+        //dispatch(getSingleProfile(currentUser.name));
+        
       })
       .catch((error) => {
         console.log(error);
@@ -111,7 +104,7 @@ const EditBooking = ({ ...props }) => {
                 type="date"
               />
             </div>
-            <FormInput label="Price" id="guests" name="guests" type="number" />
+            <FormInput label="Guests" id="guests" name="guests" type="number" />
             <button type="submit"> Confirm changes</button>
           </Form>
         )}

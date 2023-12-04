@@ -4,22 +4,7 @@ const Hero = ({ img, text }) => {
   const location = useLocation();
 
   return (
-    <section className="relative z-0">
-      {location.pathname === "/" && (
-        <img
-          src={img}
-          className={" min-w-full object-cover h-screen"}
-        ></img>
-      )}
-      {location.pathname == "/account" && (
-        <img
-          src={img}
-          className="h-[550px] md:h-[300px] md:min-w-full object-cover object-left"
-        ></img>
-      )}
-      {location.pathname !== "/" && location.pathname !== "/account" && (
-        <img src={img} className={"h-[300px] min-w-full object-cover object-bottom "}></img>
-      )}
+    <section className="relative z-0 pt-72">
 
       <h1
         className={

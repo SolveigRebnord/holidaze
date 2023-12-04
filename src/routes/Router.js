@@ -6,6 +6,7 @@ import OneVenue from "../pages/OneVenue";
 import LogIn from "../pages/LogIn";
 import Account from "../pages/Account";
 import Homepage from "../pages/Homepage";
+import Accountcopy from "../pages/Accountcopy";
 
 
 const router = createBrowserRouter([
@@ -33,7 +34,7 @@ const router = createBrowserRouter([
 
       {
         path: "/account",
-        element: <Account />,
+        element: <Accountcopy />,
       },
     ],
   },

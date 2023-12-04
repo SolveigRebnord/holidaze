@@ -24,7 +24,7 @@ const BookingSlice = createSlice({
 
 export default BookingSlice.reducer;
 
-const { SET_BOOKINGS, SET_SINGLE_BOOKING, SET_FILTERED_BOOKINGS } = BookingSlice.actions;
+const { SET_BOOKINGS, SET_SINGLE_BOOKING, SET_FILTERED_BOOKINGS, EDIT_BOOKING } = BookingSlice.actions;
 
 const header = authHeader();
 console.log(header);
@@ -117,6 +117,7 @@ export const deleteBooking = (id) => async (dispatch) => {
 };
 
 export const editBooking = (body, id) => async (dispatch) => {
+  console.log(body, id)
   await axios
     .put(`https://nf-api.onrender.com/api/v1/holidaze/bookings/${id}`, body, {
       headers: header,
@@ -124,6 +125,7 @@ export const editBooking = (body, id) => async (dispatch) => {
     .then(function (response) {
       let data = response.data;
       console.log(data);
+   
     })
     .catch(function (error) {
       console.log(error);
